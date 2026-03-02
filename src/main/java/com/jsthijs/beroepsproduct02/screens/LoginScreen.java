@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
@@ -55,27 +56,26 @@ public class LoginScreen implements Screen{
         userInputPane.getChildren().add(password);
 
         Button loginButton = new Button("Login");
-        loginButton.setOnMouseClicked(e -> { login(username.getText(), password.getText()); });
+        loginButton.setOnMouseClicked(e -> {
+            try {
+                ResultSet rs = db.loginUser(username.getText(), password.getText());
+                if (rs.next()) {
+                    user = new User(rs);
+                    NavigateTo(new HomeScreen());
+                }
+                else {
+                    username.setStyle("-fx-text-fill: red;");
+                    password.setStyle("-fx-text-fill: red;");
+                    System.out.println("incorrect data");
+                }
+            } catch (SQLException ex) { throw new RuntimeException(ex); }
+        });
         userInputPane.getChildren().add(loginButton);
 
         loginPane.getChildren().addAll(labelPane, userInputPane);
 
         root.getChildren().addAll(header, loginPane);
 
-    }
-
-    private void login(String username, String password) {
-        String query = "SELECT * FROM `users` WHERE username = '" + username + "' AND password = '" + password + "'";
-        try {
-            ResultSet rs = db.executeQuery(query);
-            while (rs.next()) {
-                user = new User(rs);
-                NavigateTo(new HomeScreen());
-            }
-
-        } catch (Exception ex) {
-
-        }
     }
 
     public Scene getScene() {

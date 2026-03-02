@@ -1,6 +1,12 @@
 package com.jsthijs.beroepsproduct02;
 
+import com.jsthijs.beroepsproduct02.models.Item;
+import com.jsthijs.beroepsproduct02.models.User;
+
 import java.sql.*;
+import java.util.HashMap;
+
+import static com.jsthijs.beroepsproduct02.Application.dbTags;
 
 public class Database {
 
@@ -34,6 +40,107 @@ public class Database {
 
     public Database(String host, String user, String dbname) {
         this(host, "3306", user, "", dbname);
+    }
+
+    // item logica
+    public void addItem(Item item) {
+        try {
+            // Prepare statement om fouten en sql injection tegen te gaan
+            PreparedStatement ps = this.conn.prepareStatement("INSERT INTO items VALUES (0, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, item.getName());
+            ps.setString(2, item.getSummary());
+            ps.setString(3, item.getImage());
+            ps.setString(4, item.getMaker());
+            ps.setInt(5, item.getReleaseYear());
+            ps.setString(6, item.getType());
+            ps.setInt(7, item.getUserId());
+
+            ps.executeUpdate();
+
+            // haalt het id op van het net toegevoegde regel en zet het in de item class
+            int itemId = this.stmt.executeQuery("SELECT id FROM items WHERE userId = " + item.getUserId() + " ORDER BY id DESC LIMIT 1").getInt("id");
+            item.setId(itemId);
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public void setItemTags(int itemId, String tagName) {
+        try {
+            // verwijderd bestaande tags van een item
+            PreparedStatement ps1 = this.conn.prepareStatement("DELETE FROM itemTags * WHERE itemId = ?");
+            ps1.setInt(1, itemId);
+            ps1.executeUpdate();
+
+            // voegt tags toe aan een item
+            PreparedStatement ps2 = this.conn.prepareStatement("INSERT INTO itemTags VALUES (?, ?)");
+            ps2.setInt(1, itemId);
+            ps2.setInt(2, dbTags.getIdByName(tagName));
+            ps2.executeUpdate();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public ResultSet getItem(int id) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM items WHERE id = ?");
+            ps.setInt(1, id);
+            return ps.executeQuery();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public ResultSet getItems(String type, int limit) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM items WHERE type = ? ORDER BY id DESC LIMIT ?");
+            ps.setString(1, type);
+            ps.setInt(2, limit);
+            return ps.executeQuery();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public ResultSet getItemTags(int itemId) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM itemTags WHERE itemId = ?");
+            ps.setInt(1, itemId);
+            return ps.executeQuery();
+        } catch (Exception e) { throw new RuntimeException(e); }
+    }
+
+    // user logica
+    public void addUser(User user) {
+        try {
+            // Prepare statement om fouten en sql injection tegen te gaan
+            PreparedStatement ps = this.conn.prepareStatement("INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getName());
+
+            // zet de kolom naar null als de gebruiker geen gegevens heeft ingevoerd
+            ps.setString(4, user.getEmail() != null ? user.getEmail() : null);
+            ps.setString(5, user.getPhoneNumber() != null ? user.getPhoneNumber() : null);
+            ps.setString(6, user.getCity() != null ? user.getCity() : null);
+
+            ps.setInt(7, user.getIsAdmin());
+
+            ps.executeUpdate();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public ResultSet loginUser(String username, String password) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?");
+            ps.setString(1, username);
+            ps.setString(2, password);
+            return ps.executeQuery();
+
+        } catch (SQLException e) { throw new RuntimeException(e); }
+
+    }
+
+    public ResultSet getTags() {
+        // haalt alle tags op uit de database
+        try {
+            ResultSet rs  = this.stmt.executeQuery("SELECT id, name FROM tags");
+            return rs;
+        } catch (SQLException e) { throw new RuntimeException(e); }
+
     }
 
     public ResultSet executeQuery(String query) throws SQLException {

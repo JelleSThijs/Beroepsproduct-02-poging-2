@@ -67,7 +67,7 @@ public class SearchScreen implements Screen {
         try {
             ResultSet item = db.executeQuery(query);
             while(item.next()){
-                itemList.getChildren().add(renderItem(new Item(item), item.getString("tagName")));
+//                itemList.getChildren().add(renderItem(new Item(item), item.getString("tagName")));
             }
         } catch (Exception ex) { System.err.println("Error while executing query: " + ex.getMessage()); }
 

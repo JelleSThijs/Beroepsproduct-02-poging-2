@@ -2,6 +2,7 @@ package com.jsthijs.beroepsproduct02.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.jsthijs.beroepsproduct02.Application.db;
 
@@ -13,15 +14,17 @@ public class User {
     private String email;
     private String phoneNumber;
     private String city;
+    private int isAdmin = 0;
 
-    public User(int id, String username, String password, String name, String email, String phoneNumber, String city) {
+    public User(int id, String username, String password, String name, String email, String phoneNumber, String city, int isAdmin) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.city = city;
+        this.email = email; // deze velden zijn optioneel
+        this.phoneNumber = phoneNumber; // deze velden zijn optioneel
+        this.city = city; // deze velden zijn optioneel
+        this.isAdmin = isAdmin;
     }
 
     public User(ResultSet rs) throws SQLException {
@@ -34,12 +37,15 @@ public class User {
         this.city = rs.getString("city");
     }
 
-    public void saveItem(String name, String summary, String image, String maker, Integer releaseYear, String type) {
+    public void addItem(String name, String summary, String image, String maker, Integer releaseYear, String type, ArrayList<String> tags) {
+        Item item = new Item(name, summary, image, maker, releaseYear, type, this.id, tags);
+        db.addItem(item);
+
+        tags.forEach(tagName -> {
+            db.setItemTags(item.getId(), tagName);
+        });
     }
 
-    public void saveItem(Item item) {
-
-    }
 
     public void deleteItem(Item item) {
         if (this.id == item.getUserId()) {
@@ -74,5 +80,9 @@ public class User {
 
     public String getCity() {
         return city;
+    }
+
+    public int getIsAdmin() {
+        return isAdmin;
     }
 }

@@ -1,16 +1,15 @@
 package com.jsthijs.beroepsproduct02.screens;
 
+import com.jsthijs.beroepsproduct02.models.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
@@ -26,15 +25,14 @@ public class NewScreen implements Screen {
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
 
-        GridPane itemPane =  new GridPane();
-        itemPane.setAlignment(Pos.TOP_CENTER);
-        itemPane.setPrefSize(1160, 550);
-        itemPane.setMaxSize(1160, 550);
+        HBox itemPane =  new HBox();
+        itemPane.setAlignment(Pos.CENTER);
+        itemPane.setPrefSize(window_size[0], 550);
+        itemPane.setMaxSize(window_size[0], 550);
 
 
-        TextField imagePath = new TextField();
-        imagePath.setPromptText("Link naar foto / poster");
-        imagePath.setPadding(new Insets(150, 100, 150, 100));
+
+
 
         FlowPane inputs = new FlowPane();
         inputs.setPrefSize(700, 550);
@@ -44,20 +42,16 @@ public class NewScreen implements Screen {
         inputs.setHgap(10);
         inputs.setVgap(10);
 
+        TextField imagePath = new TextField();
+        imagePath.setPromptText("Link naar foto / poster");
+
         TextField title = new TextField();
         title.setPromptText("Titel");
         title.setPrefWidth(600);
 
-        ChoiceBox genre = new ChoiceBox();
-        genre.setPrefSize(50, 32);
-        genre.setValue("Genre");
-        try {
-            ResultSet rs = db.executeQuery("SELECT name FROM tags;");
-            while(rs.next()) { genre.getItems().add(rs.getString("name")); }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        TextField maker = new TextField();
+        maker.setPromptText("Titel");
+        maker.setPrefWidth(600);
 
         TextField releaseYear = new TextField();
         releaseYear.setPromptText("Jaar");
@@ -74,13 +68,58 @@ public class NewScreen implements Screen {
 
         FlowPane userFullName = new FlowPane(new Text(user.getName()));
 
+        ListView genre = new ListView();
+        genre.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        genre.setMaxHeight(425);
+
+        try {
+            ResultSet rs = db.executeQuery("SELECT name FROM tags;");
+            while(rs.next()) { genre.getItems().add(rs.getString("name")); }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         Button save = new Button("opslaan");
         save.setOnAction(e -> {
+
+            int itemId = 0;
+            try {
+                ResultSet rs = db.executeQuery("SELECT id FROM items ORDER BY id DESC LIMIT 1;");
+                while(rs.next()) { itemId = rs.getInt("id"); }
+
+                int finalItemId = itemId;
+                db.executeUpdate(
+                    "INSERT INTO items VALUES (" +
+                        itemId + ", '" +
+                        title.getText() + "', '" +
+                        summary.getText() + "', '" +
+                        imagePath.getText() + "', '" +
+                        maker.getText() + "', " +
+                        Integer.parseInt(releaseYear.getText()) + ", '" +
+                        type.getValue().toString() + "', " +
+                        user.getId() +
+                    ");"
+                );
+
+
+                genre.getItems().forEach(item -> {
+                    String tagName = item.toString();
+                    try {
+                        db.executeUpdate(
+                            "INSERT INTO itemtags VALUES (" +
+                                    finalItemId + ", (SELECT id FROM tags WHERE name = '" +
+                                    tagName + "';)" +
+                            ");"
+                        );
+                    } catch (SQLException ex) { throw new RuntimeException(ex); }
+                });
+
+            } catch (SQLException ex) { throw new RuntimeException(ex); }
         });
 
-        inputs.getChildren().addAll(title, genre, releaseYear, type, summary, userFullName);
-        itemPane.add(imagePath, 0, 0);
-        itemPane.add(inputs, 1, 0);
+        inputs.getChildren().addAll(imagePath, title, maker, releaseYear, type, summary, userFullName);
+        itemPane.getChildren().addAll(inputs, genre);
         root.getChildren().addAll(header, itemPane, save);
 
     }

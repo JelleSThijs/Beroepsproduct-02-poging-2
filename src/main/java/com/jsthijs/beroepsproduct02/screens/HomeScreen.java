@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
@@ -31,13 +32,13 @@ public class HomeScreen implements Screen {
         newBooks.setPrefSize(1200, 32);
         newBooks.setStyle("-fx-background-color: green");
 
-        items.getChildren().addAll(newBooks, itemList("Book", 6));
+        items.getChildren().addAll(newBooks, itemList("book", 6));
 
         FlowPane newFilms = new FlowPane(new Text("Nieuw toegevoegde films"));
         newFilms.setPrefSize(1200, 32);
         newFilms.setStyle("-fx-background-color: green");
 
-        items.getChildren().addAll(newFilms, itemList("Film", 6));
+        items.getChildren().addAll(newFilms, itemList("film", 6));
 
 
     }
@@ -49,26 +50,16 @@ public class HomeScreen implements Screen {
         itemList.setHgap(10);
         itemList.setVgap(10);
 
-        String query = "SELECT items.*, tags.name as tagName FROM items\n" +
-                 "JOIN itemtags ON items.ID = itemtags.itemId\n" +
-                 "JOIN tags ON tagId = tags.ID \n" +
-                 "WHERE TYPE ='" + type + "'\n" +
-                 "GROUP BY items.ID\n" +
-                 "ORDER BY items.ID DESC LIMIT " + limit + ";";
 
+        ResultSet rs = db.getItems(type, limit);
         try {
-            ResultSet item = db.executeQuery(query);
-            while(item.next()){
-                itemList.getChildren().add(renderItem(new Item(item), item.getString("tagName")));
-            }
-        } catch (Exception ex) {
-            System.err.println("Error while executing query: " + ex.getMessage());
-        }
+            while (rs.next()) { itemList.getChildren().add(renderItem(new Item(rs))); }
+        } catch (SQLException e) { throw new RuntimeException(e); }
 
         return itemList;
     }
 
-    private Pane renderItem(Item item, String tagName) {
+    private Pane renderItem(Item item) {
         FlowPane itemPane = new FlowPane();
         itemPane.setMinSize(144, 248);
         itemPane.setPrefSize(144, 248);
@@ -82,10 +73,15 @@ public class HomeScreen implements Screen {
         itemImg.setFitWidth(144);
 
         FlowPane itemTitle = new FlowPane(new Text(item.getName()));
+        itemPane.getChildren().addAll(itemImg, itemTitle);
 
-        FlowPane tagText = new FlowPane(new Text(tagName));
-        tagText.setStyle("-fx-background-color: red");
-        tagText.setPrefSize(70, 16);
+        for (int i = 0; i < item.getTags().size() && i < 3; i ++) {
+            FlowPane tagText = new FlowPane(new Text(item.getTags().get(i)));
+            tagText.setStyle("-fx-background-color: red");
+            tagText.setPrefSize(70, 16);
+            itemTitle.getChildren().addAll(tagText);
+        }
+
 
         FlowPane releaseYear = new FlowPane(new Text(item.getReleaseYear().toString()));
         releaseYear.setPrefSize(60, 16);
@@ -95,7 +91,7 @@ public class HomeScreen implements Screen {
         maker.setStyle("-fx-background-color: purple");
         maker.setPrefSize(144, 16);
 
-        itemPane.getChildren().addAll(itemImg, itemTitle, tagText, releaseYear, maker);
+        itemPane.getChildren().addAll(releaseYear, maker);
 
         return itemPane;
     }
