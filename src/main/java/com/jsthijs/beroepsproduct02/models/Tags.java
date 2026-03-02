@@ -32,4 +32,8 @@ public class Tags {
         int indexNum = this.name.indexOf(name);
         return id.get(indexNum);
     }
+
+    public ArrayList<String> getName() {
+        return name;
+    }
 }

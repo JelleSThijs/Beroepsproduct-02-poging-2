@@ -5,16 +5,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
@@ -73,60 +71,18 @@ public class ProfileScreen implements Screen {
         itemList.setHgap(10);
         itemList.setVgap(10);
 
-        String query = "SELECT items.*, tags.name as tagName FROM items\n" +
-                "JOIN itemtags ON items.ID = itemtags.itemId\n" +
-                "JOIN tags ON tagId = tags.ID \n" +
-                "WHERE userId ='" + userId + "'\n" +
-                "GROUP BY items.ID\n" +
-                "ORDER BY items.ID DESC;";
-
         try {
-            ResultSet item = db.executeQuery(query);
-            while(item.next()){
-//                itemList.getChildren().add(renderItem(new Item(item), item.getString("tagName")));
+            ResultSet rs = db.getUserItems(this.userId);
+            while (rs.next()) {
+                if (user.getId() == this.userId) {
+                    VBox ItemPane = new VBox();
+
+                }
+                itemList.getChildren().add(new Item(rs).renderItem());
             }
-        } catch (Exception ex) { System.err.println("Error while executing query: " + ex.getMessage()); }
+        } catch (SQLException e) { throw new RuntimeException(e); }
 
         return itemList;
-    }
-
-    private Pane renderItem(Item item, String tagName) {
-        FlowPane itemPane = new FlowPane();
-        itemPane.setMinSize(144, 248);
-        itemPane.setPrefSize(144, 248);
-        itemPane.setMaxSize(144, 248);
-        itemPane.setHgap(13);
-        itemPane.setVgap(4);
-
-        if (user.getId() == this.userId) {
-            RadioButton rb = new RadioButton("Selecteer item");
-            rb.setUserData(item);
-            rb.setToggleGroup(this.toggleGroup);
-            itemPane.getChildren().add(rb);
-        }
-
-
-        ImageView itemImg = new ImageView(item.getImage());
-        itemImg.setFitHeight(196);
-        itemImg.setFitWidth(144);
-
-        FlowPane itemTitle = new FlowPane(new Text(item.getName()));
-
-        FlowPane tagText = new FlowPane(new Text(tagName));
-        tagText.setStyle("-fx-background-color: red");
-        tagText.setPrefSize(70, 16);
-
-        FlowPane releaseYear = new FlowPane(new Text(item.getReleaseYear().toString()));
-        releaseYear.setPrefSize(60, 16);
-        releaseYear.setStyle("-fx-background-color: blue");
-
-        FlowPane maker = new FlowPane(new Text(item.getMaker()));
-        maker.setStyle("-fx-background-color: purple");
-        maker.setPrefSize(144, 16);
-
-        itemPane.getChildren().addAll(itemImg, itemTitle, tagText, releaseYear, maker);
-
-        return itemPane;
     }
 
     public Scene getScene() {

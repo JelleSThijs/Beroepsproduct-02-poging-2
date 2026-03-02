@@ -4,6 +4,7 @@ import com.jsthijs.beroepsproduct02.models.Item;
 import com.jsthijs.beroepsproduct02.models.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.jsthijs.beroepsproduct02.Application.dbTags;
@@ -54,28 +55,34 @@ public class Database {
             ps.setInt(5, item.getReleaseYear());
             ps.setString(6, item.getType());
             ps.setInt(7, item.getUserId());
-
             ps.executeUpdate();
+        } catch (SQLException e) { throw new RuntimeException(e); }
 
-            // haalt het id op van het net toegevoegde regel en zet het in de item class
-            int itemId = this.stmt.executeQuery("SELECT id FROM items WHERE userId = " + item.getUserId() + " ORDER BY id DESC LIMIT 1").getInt("id");
-            item.setId(itemId);
+        // haalt het id op van het net toegevoegde regel en zet het in de item class
+        try {
+            ResultSet rs = this.stmt.executeQuery("SELECT id FROM items WHERE userId = " + item.getUserId() + " ORDER BY id DESC LIMIT 1");
+            if (rs.next()) { item.setId(rs.getInt("id")); }
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
 
-    public void setItemTags(int itemId, String tagName) {
+    public void setItemTags(int itemId, ArrayList<String> tagNames) {
+        // verwijderd bestaande tags van een item
         try {
-            // verwijderd bestaande tags van een item
-            PreparedStatement ps1 = this.conn.prepareStatement("DELETE FROM itemTags * WHERE itemId = ?");
+            PreparedStatement ps1 = this.conn.prepareStatement("DELETE FROM itemTags WHERE itemId = ?");
             ps1.setInt(1, itemId);
             ps1.executeUpdate();
-
-            // voegt tags toe aan een item
-            PreparedStatement ps2 = this.conn.prepareStatement("INSERT INTO itemTags VALUES (?, ?)");
-            ps2.setInt(1, itemId);
-            ps2.setInt(2, dbTags.getIdByName(tagName));
-            ps2.executeUpdate();
         } catch (SQLException e) { throw new RuntimeException(e); }
+
+        // voegt tags toe aan een item
+        tagNames.forEach(tagName -> {
+            try {
+                PreparedStatement ps = this.conn.prepareStatement("INSERT INTO itemTags VALUES (?, ?)");
+                ps.setInt(1, itemId);
+                ps.setInt(2, dbTags.getIdByName(tagName));
+                ps.executeUpdate();
+
+            } catch (SQLException e) { throw new RuntimeException(e); }
+        });
     }
 
     public ResultSet getItem(int id) {
@@ -91,6 +98,14 @@ public class Database {
             PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM items WHERE type = ? ORDER BY id DESC LIMIT ?");
             ps.setString(1, type);
             ps.setInt(2, limit);
+            return ps.executeQuery();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public ResultSet getUserItems(int userId) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM items WHERE userid = ?");
+            ps.setInt(1, userId);
             return ps.executeQuery();
         } catch (SQLException e) { throw new RuntimeException(e); }
     }

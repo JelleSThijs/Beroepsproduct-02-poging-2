@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.Flow;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
@@ -55,27 +56,31 @@ public class LoginScreen implements Screen{
         password.setPromptText("Wachtwoord");
         userInputPane.getChildren().add(password);
 
+        FlowPane alert = new FlowPane(new Text("gegevens incorrect"));
+        alert.setMinWidth(window_size[0]);
+        alert.setAlignment(Pos.CENTER);
+        alert.setVisible(false);
+
         Button loginButton = new Button("Login");
+
         loginButton.setOnMouseClicked(e -> {
             try {
                 ResultSet rs = db.loginUser(username.getText(), password.getText());
                 if (rs.next()) {
                     user = new User(rs);
-                    NavigateTo(new HomeScreen());
+                    NavigateTo(new ProfileScreen(user.getId()));
                 }
                 else {
                     username.setStyle("-fx-text-fill: red;");
                     password.setStyle("-fx-text-fill: red;");
-                    System.out.println("incorrect data");
+                    alert.setVisible(true);
                 }
             } catch (SQLException ex) { throw new RuntimeException(ex); }
         });
+
         userInputPane.getChildren().add(loginButton);
-
         loginPane.getChildren().addAll(labelPane, userInputPane);
-
-        root.getChildren().addAll(header, loginPane);
-
+        root.getChildren().addAll(header, loginPane, alert);
     }
 
     public Scene getScene() {

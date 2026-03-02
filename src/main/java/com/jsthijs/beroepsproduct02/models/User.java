@@ -37,16 +37,6 @@ public class User {
         this.city = rs.getString("city");
     }
 
-    public void addItem(String name, String summary, String image, String maker, Integer releaseYear, String type, ArrayList<String> tags) {
-        Item item = new Item(name, summary, image, maker, releaseYear, type, this.id, tags);
-        db.addItem(item);
-
-        tags.forEach(tagName -> {
-            db.setItemTags(item.getId(), tagName);
-        });
-    }
-
-
     public void deleteItem(Item item) {
         if (this.id == item.getUserId()) {
 
