@@ -157,23 +157,36 @@ public class Database {
     }
 
     // user logica
-    public void addUser(User user) {
+    public Boolean addUser(User user) {
+        boolean userExists = false;
+        // controleren op al bestaande gebruiker
         try {
-            // Prepare statement om fouten en sql injection tegen te gaan
-            PreparedStatement ps = this.conn.prepareStatement("INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM users WHERE username = ?");
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getName());
-
-            // zet de kolom naar null als de gebruiker geen gegevens heeft ingevoerd
-            ps.setString(4, user.getEmail() != null ? user.getEmail() : null);
-            ps.setString(5, user.getPhoneNumber() != null ? user.getPhoneNumber() : null);
-            ps.setString(6, user.getCity() != null ? user.getCity() : null);
-
-            ps.setInt(7, user.getIsAdmin());
-
-            ps.executeUpdate();
+            if (ps.executeQuery().next()) { userExists = true; }
         } catch (SQLException e) { throw new RuntimeException(e); }
+
+        if (!userExists) {
+            // gebruiker aanmaken in de database
+            try {
+                // Prepare statement om fouten en sql injection tegen te gaan
+                PreparedStatement ps = this.conn.prepareStatement("INSERT INTO users VALUES (0, ?, ?, ?, ?, ?, ?, ?)");
+                ps.setString(1, user.getUsername());
+                ps.setString(2, user.getPassword());
+                ps.setString(3, user.getName());
+
+                // zet de kolom naar null als de gebruiker geen gegevens heeft ingevoerd
+                ps.setString(4, user.getEmail() != null ? user.getEmail() : null);
+                ps.setString(5, user.getPhoneNumber() != null ? user.getPhoneNumber() : null);
+                ps.setString(6, user.getCity() != null ? user.getCity() : null);
+
+                ps.setInt(7, user.getIsAdmin());
+
+                ps.executeUpdate();
+                userExists = true;
+            } catch (SQLException e) { throw new RuntimeException(e); }
+        }
+        return userExists;
     }
 
     public ResultSet loginUser(String username, String password) {

@@ -16,15 +16,13 @@ public class User {
     private String city;
     private int isAdmin = 0;
 
-    public User(int id, String username, String password, String name, String email, String phoneNumber, String city, int isAdmin) {
-        this.id = id;
+    public User(String username, String password, String name, String email, String phoneNumber, String city) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email; // deze velden zijn optioneel
         this.phoneNumber = phoneNumber; // deze velden zijn optioneel
         this.city = city; // deze velden zijn optioneel
-        this.isAdmin = isAdmin;
     }
 
     public User(ResultSet rs) throws SQLException {
