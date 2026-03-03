@@ -5,10 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,85 +15,50 @@ import javafx.stage.Stage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
-public class EditScreen implements Screen {
+public class EditScreen extends NewScreen implements Screen {
     private Scene scene;
 
     public EditScreen(Item item) {
-        FlowPane root = new FlowPane();
-        this.scene = new Scene(root, window_size[0], window_size[1]);
-        root.setAlignment(Pos.TOP_CENTER);
+        super();
 
-        GridPane itemPane =  new GridPane();
-        itemPane.setAlignment(Pos.TOP_CENTER);
-        itemPane.setPrefSize(1160, 550);
-        itemPane.setMaxSize(1160, 550);
-
-
-        TextField imagePath = new TextField();
-        imagePath.setPromptText("Link naar foto / poster");
-        imagePath.setPadding(new Insets(150, 100, 150, 100));
-
-        FlowPane inputs = new FlowPane();
-        inputs.setPrefSize(700, 550);
-        inputs.setMaxSize(700, 550);
-        inputs.setAlignment(Pos.CENTER);
-        inputs.setOrientation(Orientation.VERTICAL);
-        inputs.setHgap(10);
-        inputs.setVgap(10);
-
-        TextField title = new TextField(item.getName());
-        title.setPromptText("Titel");
-        title.setPrefWidth(600);
-
-        ChoiceBox genre = new ChoiceBox();
-        genre.setPrefSize(50, 32);
-        genre.setValue("Genre");
-        try {
-            ResultSet rs = db.executeQuery("SELECT name FROM tags;");
-            while(rs.next()) { genre.getItems().add(rs.getString("name")); }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            genre.setValue(db.executeQuery("SELECT tags.name FROM tags LEFT JOIN itemtags ON tagId = tags.id WHERE itemId = '" + item.getId() + "'"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        TextField releaseYear = new TextField(item.getReleaseYear().toString());
-        releaseYear.setPromptText("Jaar");
-        releaseYear.setPrefSize(50, 32);
-        releaseYear.setMaxSize(50, 32);
-
-        ChoiceBox type = new ChoiceBox();
-        type.getItems().addAll("boek", "film");
-        type.setPrefSize(50, 32);
+        imagePath.setText(item.getImage());
+        title.setText(item.getName());
+        maker.setText(item.getMaker());
+        releaseYear.setText(item.getReleaseYear().toString());
         type.setValue(item.getType());
+        summary.setText(item.getSummary());
+        item.getTags().forEach(tag -> {
+            genre.getSelectionModel().select(tag);
+        });
 
-        TextArea summary = new TextArea(item.getSummary());
-        summary.setPromptText("Samenvatting");
-        summary.setPrefSize(600, 240);
-
-        FlowPane userFullName = new FlowPane(new Text(user.getName()));
-
-        inputs.getChildren().addAll(title, genre, releaseYear, type, summary, userFullName);
-        itemPane.add(imagePath, 0, 0);
-        itemPane.add(inputs, 1, 0);
-        root.getChildren().addAll(header, itemPane);
-
-
+        save.setOnAction(e -> { updateItem(item); });
     }
 
-    public Scene getScene() {
-        return this.scene;
-    }
-
+    @Override
     public String getTitle() {
-        return "Edit item Screen Screen";
+        return "Edit Item Screen";
+    }
+
+    private void updateItem(Item item) {
+        ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
+        item.setData(
+                title.getText(),
+                summary.getText(),
+                imagePath.getText(),
+                maker.getText(),
+                Integer.parseInt(releaseYear.getText()),
+                type.getValue(),
+                user.getId(),
+                itemTags
+        );
+
+        db.updateItem(item);
+        db.setItemTags(item.getId(), itemTags);
+        NavigateTo(new ProfileScreen(user.getId()));
     }
 
 }

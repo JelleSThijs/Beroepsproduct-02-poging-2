@@ -22,9 +22,7 @@ public class NewScreen implements Screen {
     protected ChoiceBox<String> type = new ChoiceBox<String>();
     protected TextArea summary = new TextArea();
     protected ListView<String> genre = new ListView<String>();
-
-
-
+    protected Button save = new Button("opslaan");
 
 
     public NewScreen() {
@@ -45,10 +43,10 @@ public class NewScreen implements Screen {
         inputs.setHgap(10);
         inputs.setVgap(10);
 
-        imagePath.setPromptText("Link naar foto / poster");
-
         title.setPromptText("Titel");
         title.setPrefWidth(600);
+
+        imagePath.setPromptText("Link naar foto / poster");
 
         maker.setPromptText("Uitgever / Schrijver");
         maker.setPrefWidth(600);
@@ -59,6 +57,7 @@ public class NewScreen implements Screen {
 
         type.getItems().addAll("boek", "film");
         type.setPrefSize(50, 32);
+        type.setValue("boek");
 
         summary.setPromptText("Samenvatting");
         summary.setPrefSize(600, 240);
@@ -70,11 +69,9 @@ public class NewScreen implements Screen {
 
         dbTags.getName().forEach(tagName -> { genre.getItems().add(tagName); });
 
-        Button save = new Button("opslaan");
-//        save.setOnAction(e -> { System.out.println(genre.getItems()); });
         save.setOnAction(e -> { saveItem(); });
 
-        inputs.getChildren().addAll(imagePath, title, maker, releaseYear, type, summary, userFullName);
+        inputs.getChildren().addAll(title, imagePath, maker, releaseYear, type, summary, userFullName);
         itemPane.getChildren().addAll(inputs, genre);
         root.getChildren().addAll(header, itemPane, save);
 

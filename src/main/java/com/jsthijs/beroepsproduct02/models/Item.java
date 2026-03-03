@@ -60,9 +60,9 @@ public class Item {
 
     public Pane renderItem() {
         FlowPane itemPane = new FlowPane();
-        itemPane.setMinSize(144, 248);
-        itemPane.setPrefSize(144, 248);
-        itemPane.setMaxSize(144, 248);
+        itemPane.setMinWidth(144);
+        itemPane.setPrefWidth(144);
+        itemPane.setMaxWidth(144);
         itemPane.setHgap(14);
         itemPane.setVgap(4);
 
@@ -104,6 +104,17 @@ public class Item {
         itemPane.getChildren().addAll(releaseYear, maker);
 
         return itemPane;
+    }
+
+    public void setData(String name, String summary, String image, String maker, Integer releaseYear, String type, int userId, ArrayList<String> tags) {
+        this.name = name;
+        this.summary = summary;
+        this.image = image;
+        this.maker = maker;
+        this.releaseYear = releaseYear;
+        this.type = type;
+        this.userId = userId;
+        this.tags = tags;
     }
 
     public void setId(Integer id) {

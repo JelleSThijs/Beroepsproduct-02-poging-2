@@ -6,6 +6,7 @@ import com.jsthijs.beroepsproduct02.models.User;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static com.jsthijs.beroepsproduct02.Application.dbTags;
 
@@ -65,6 +66,21 @@ public class Database {
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
 
+    public void updateItem(Item item) {
+        try {
+            // Prepare statement om fouten en sql injection tegen te gaan
+            PreparedStatement ps = this.conn.prepareStatement("UPDATE items SET name = ?, summary = ?, image = ?, maker = ?, releaseYear = ?, type = ? WHERE id = ?");
+            ps.setString(1, item.getName());
+            ps.setString(2, item.getSummary());
+            ps.setString(3, item.getImage());
+            ps.setString(4, item.getMaker());
+            ps.setInt(5, item.getReleaseYear());
+            ps.setString(6, item.getType());
+            ps.setInt(7, item.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
     public void setItemTags(int itemId, ArrayList<String> tagNames) {
         // verwijderd bestaande tags van een item
         try {
@@ -108,6 +124,28 @@ public class Database {
             ps.setInt(1, userId);
             return ps.executeQuery();
         } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
+    public ResultSet getSearchResults(String searchText, String tag, String releaseYear, String type) {
+        try {
+            int i = 2;
+
+            String query = "SELECT * FROM items WHERE name LIKE ? ";
+            if (!Objects.equals(tag, "Genre")) { query += "AND id IN (SELECT itemId FROM itemTags WHERE tagId = ?) "; }
+            if (!Objects.equals(releaseYear, "")) { query += "AND releaseYear = ? "; }
+            if (!Objects.equals(type, "Type")) { query += "AND type = ?"; }
+
+            PreparedStatement ps = this.conn.prepareStatement(query);
+            ps.setString(1, "%" + searchText + "%");
+            if (!Objects.equals(tag, "Genre")) { ps.setInt(i, dbTags.getIdByName(tag)); i ++; }
+            if (!Objects.equals(releaseYear, "")) { ps.setInt(i, Integer.parseInt(releaseYear)); i++; }
+            if (!Objects.equals(type, "Type")) { ps.setString(i, type); i++; }
+
+            System.out.println(ps);
+            return ps.executeQuery();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+
+
     }
 
     public ResultSet getItemTags(int itemId) {
