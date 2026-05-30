@@ -29,7 +29,7 @@ public class Database {
         this.dbname = dbname;
 
         try {
-            this.conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbname , user, passwd);
+            this.conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbname, user, passwd);
             this.stmt = this.conn.createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -57,13 +57,19 @@ public class Database {
             ps.setString(6, item.getType());
             ps.setInt(7, item.getUserId());
             ps.executeUpdate();
-        } catch (SQLException e) { throw new RuntimeException(e); }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         // haalt het id op van het net toegevoegde regel en zet het in de item class
         try {
             ResultSet rs = this.stmt.executeQuery("SELECT id FROM items WHERE userId = " + item.getUserId() + " ORDER BY id DESC LIMIT 1");
-            if (rs.next()) { item.setId(rs.getInt("id")); }
-        } catch (SQLException e) { throw new RuntimeException(e); }
+            if (rs.next()) {
+                item.setId(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void updateItem(Item item) {
@@ -78,8 +84,20 @@ public class Database {
             ps.setString(6, item.getType());
             ps.setInt(7, item.getId());
             ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ResultSet getItemOwnerDetails(Integer userId) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("SELECT name, email, phonenumber, city FROM users WHERE id = ?");
+            ps.setInt(1, userId);
+            return ps.executeQuery();
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
+
+
 
     public void setItemTags(int itemId, ArrayList<String> tagNames) {
         // verwijderd bestaande tags van een item
