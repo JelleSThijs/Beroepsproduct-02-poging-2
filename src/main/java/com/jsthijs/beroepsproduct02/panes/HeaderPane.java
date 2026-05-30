@@ -60,6 +60,7 @@ public class HeaderPane {
             ChoiceBox filter1 = new ChoiceBox();
             filter1.setPrefSize(156, 40);
             filter1.setValue("Genre");
+            filter1.getItems().add("Genre");
             try {
                 ResultSet rs = db.executeQuery("SELECT name FROM tags;");
                 while(rs.next()) { filter1.getItems().add(rs.getString("name")); }
@@ -78,7 +79,7 @@ public class HeaderPane {
             ChoiceBox filter3 = new ChoiceBox();
             filter3.setPrefSize(156, 40);
             filter3.setValue("Type");
-            filter3.getItems().addAll("boek", "film");
+            filter3.getItems().addAll("Type", "boek", "film");
 
             // zoekknop
             ImageView searchIcon = new ImageView(Application.class.getResource("icons/search-48.png").toString());
