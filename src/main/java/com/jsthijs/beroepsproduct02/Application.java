@@ -15,7 +15,7 @@ public class Application extends javafx.application.Application {
     private static Stage primaryStage;
     public static int[] margin = {32, 32};
     public static int[] window_size = {1440, 800};
-    public static Database db = new Database("localhost","root","beroepsproduct-02");
+    public static Database db = new Database("localhost","root","beroepsproduct-02-jelle-thijs");
     public static FlowPane header = new HeaderPane().getHeader();
     public static User user = null;
     public static Tags dbTags = new Tags();
