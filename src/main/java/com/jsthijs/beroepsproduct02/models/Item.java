@@ -1,5 +1,9 @@
 package com.jsthijs.beroepsproduct02.models;
 
+import static com.jsthijs.beroepsproduct02.Application.*;
+
+import com.jsthijs.beroepsproduct02.screens.ItemScreen;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -9,9 +13,6 @@ import javafx.scene.text.Text;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import static com.jsthijs.beroepsproduct02.Application.db;
-import static com.jsthijs.beroepsproduct02.Application.dbTags;
 
 public class Item {
     private Integer id;
@@ -102,6 +103,11 @@ public class Item {
         maker.setPrefSize(144, 16);
 
         itemPane.getChildren().addAll(releaseYear, maker);
+
+        itemPane.setOnMouseClicked(e -> {
+            // navigeer naar de detailscherm van dit item
+            NavigateTo(new ItemScreen(this));
+        });
 
         return itemPane;
     }
