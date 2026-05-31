@@ -27,6 +27,12 @@ public class User {
         this.city = city; // deze velden zijn optioneel
     }
 
+    // Constructor voor testen zonder database.
+    public User(String username, String password, String name, String email, String phoneNumber, String city, int isAdmin) {
+        this(username, password, name, email, phoneNumber, city);
+        this.isAdmin = isAdmin;
+    }
+
     // Maakt een user op basis van een database-resultaat.
     public User(ResultSet rs) throws SQLException {
             // Velden uitlezen uit het resultaat.
