@@ -45,10 +45,10 @@ public class ProfileScreen implements Screen {
                     NavigateTo(new EditScreen((Item) this.toggleGroup.getSelectedToggle().getUserData()));
                 });
 
-            Button deleteButton = new Button("Verwijder");
-            deleteButton.setOnAction(e -> {
-                user.deleteItem((Item) this.toggleGroup.getSelectedToggle().getUserData());
-            });
+                Button deleteButton = new Button("Verwijder");
+                deleteButton.setOnAction(e -> {
+                    deleteItemAlert((Item) this.toggleGroup.getSelectedToggle().getUserData());
+                });
 
                 crudPane.getChildren().addAll(deleteButton, editButton, newButton);
                 root.getChildren().add(crudPane);
@@ -105,5 +105,19 @@ public class ProfileScreen implements Screen {
 
     public String getTitle() {
         return "User Profile";
+    }
+
+    private void deleteItemAlert(Item item) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Bevestig verwijdering");
+        alert.setHeaderText(null);
+        alert.setContentText("Weet je zeker dat je deze item wilt verwijderen?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            user.deleteItem(item);
+            NavigateTo(new ProfileScreen(this.userId));
+        } else {
+            alert.close();
+        }
     }
 }

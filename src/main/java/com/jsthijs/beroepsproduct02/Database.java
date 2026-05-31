@@ -97,6 +97,15 @@ public class Database {
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
 
+    public void deleteItem(int itemId, int userId) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("DELETE FROM items WHERE id = ? AND userId = ?");
+            ps.setInt(1, itemId);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
 
 
     public void setItemTags(int itemId, ArrayList<String> tagNames) {

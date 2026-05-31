@@ -26,7 +26,6 @@ public class User {
     }
 
     public User(ResultSet rs) throws SQLException {
-        if  (rs.next()) {
             id = rs.getInt("id");
             username = rs.getString("username");
             password = rs.getString("password");
@@ -34,12 +33,12 @@ public class User {
             email = rs.getString("email");
             phoneNumber = rs.getString("phoneNumber");
             city = rs.getString("city");
-        }
+            isAdmin = rs.getInt("isAdmin");
     }
 
     public void deleteItem(Item item) {
         if (this.id == item.getUserId()) {
-
+            db.deleteItem(item.getId(), this.id);
         }
     }
 
