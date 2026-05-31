@@ -51,17 +51,55 @@
     -fx-border-color: -color-schaduw;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
-
 }
 
-.dropdown .arrow, .dropdown .arrow-button {
-    -fx-background-color: none;   /* colour */
+.dropdown .arrow {
+    -fx-shape: "M 0 0 L 4 4 L 8 0";
+    -fx-background-color: null;
+    -fx-border-color: -color-schaduw;
+}
+
+.dropdown .context-menu {
+    -fx-background-color: -color-licht;
+    -fx-border-color: -color-schaduw;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-effect: none;
+    -fx-padding: 0;
+}
+
+.dropdown .menu-item .label {
+    -fx-text-fill: -color-donker;
+}
+
+.dropdown .menu-item:focused {
+    -fx-background-color: -color-schaduw;
+}
+
+.dropdown .menu-item:focused .label {
+    -fx-text-fill: -color-donker;
+}
+
+/* Remove checkmark */
+.dropdown .radio-menu-item .radio {
+    -fx-shape: null;
+}
+
+.dropdown .radio-menu-item {
+    -fx-padding: 8 12 8 -16;
 }
 
 .icon {
     -fx-background-color: -color-licht;
     -fx-border-color: -color-schaduw;
     -fx-padding: 4px;
+    -fx-border-radius: 100%;
+    -fx-background-radius: 100%;
+}
+
+.tags {
+    -fx-text-fill: -color-licht;
+    -fx-padding: 2px 4px;
     -fx-border-radius: 100%;
     -fx-background-radius: 100%;
 }
