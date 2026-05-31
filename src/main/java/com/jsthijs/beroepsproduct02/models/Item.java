@@ -4,6 +4,7 @@ import static com.jsthijs.beroepsproduct02.Application.*;
 
 import com.jsthijs.beroepsproduct02.screens.ItemScreen;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -71,6 +72,11 @@ public class Item {
         itemPane.setVgap(4);
         itemPane.setId("item-small");
 
+        StackPane itemStack = new StackPane();
+        itemStack.setPrefSize(144, 196);
+        itemStack.setAlignment(Pos.BOTTOM_RIGHT);
+        itemPane.getChildren().add(itemStack);
+
         // probeerd een foto op te halen anders wordt er een grijs vlak gerendered
         try {
             ImageView itemImg = new ImageView(this.getImage());
@@ -78,26 +84,30 @@ public class Item {
             itemImg.setFitHeight(196);
 
             Rectangle clip = new Rectangle(144, 196);
-            clip.setArcWidth(20);
-            clip.setArcHeight(20);
+            clip.setArcWidth(40);
+            clip.setArcHeight(40);
             itemImg.setClip(clip);
 
-            itemPane.getChildren().add(itemImg);
+            itemStack.getChildren().add(itemImg);
         } catch (Exception e) {
             Region itemImg = new Region();
             itemImg.setPrefHeight(196);
             itemImg.setPrefWidth(144);
             itemImg.setStyle("-fx-background-color: lightgray;");
             itemImg.getStyleClass().add("img");
-            itemPane.getChildren().add(itemImg);
+            itemStack.getChildren().add(itemImg);
         }
 
         FlowPane itemTitle = new FlowPane(new Text(this.getName()));
         itemTitle.setPrefWidth(144);
+        itemTitle.setAlignment(Pos.CENTER_LEFT);
+        itemTitle.getStyleClass().addAll("h3", "txtfield");
         itemPane.getChildren().add(itemTitle);
 
         renderTags().forEach(tag -> {
-            itemPane.getChildren().add(tag);
+            if (tag.getId() != null && tag.getId().equals("typeText")) {
+                itemStack.getChildren().add(tag);
+            } else { itemPane.getChildren().add(tag); }
         });
 
         itemPane.setOnMouseClicked(e -> {
@@ -113,6 +123,7 @@ public class Item {
 
         Label typeText = new Label(this.getType());
         typeText.getStyleClass().add("tag");
+        typeText.setId("typeText");
         typeText.setStyle("-fx-background-color: lightblue; -fx-border-color: blue");
         tags.add(typeText);
 

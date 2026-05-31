@@ -3,9 +3,11 @@ package com.jsthijs.beroepsproduct02.screens;
 import com.jsthijs.beroepsproduct02.models.Item;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.sql.ResultSet;
@@ -17,27 +19,30 @@ public class HomeScreen implements Screen {
     private final Scene scene;
 
     public HomeScreen() {
-        FlowPane root = new FlowPane();
+        VBox root = new VBox();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         ApplyStylesheet(this.scene);
 
         VBox items = new VBox();
-        items.setPadding(new Insets(0, 120, 0, 120));
+        items.setPadding(new Insets(16, 120, 16, 120));
         items.setSpacing(8);
 
-        root.getChildren().addAll(header, items);
+        ScrollPane scrollPane = new ScrollPane(items);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-
+        root.getChildren().addAll(header, scrollPane);
 
         FlowPane newBooks = new FlowPane(new Text("Nieuw toegevoegde boeken"));
-        newBooks.setPrefSize(1200, 32);
-        newBooks.setStyle("-fx-background-color: green");
+        newBooks.setPrefHeight(32);
+        newBooks.getStyleClass().add("h2");
 
         items.getChildren().addAll(newBooks, itemList("boek", 6));
 
         FlowPane newFilms = new FlowPane(new Text("Nieuw toegevoegde films"));
-        newFilms.setPrefSize(1200, 32);
-        newFilms.setStyle("-fx-background-color: green");
+        newFilms.setPrefHeight(32);
+        newFilms.getStyleClass().add("h2");
 
         items.getChildren().addAll(newFilms, itemList("film", 6));
 
@@ -46,8 +51,7 @@ public class HomeScreen implements Screen {
 
     private Pane itemList(String type, Integer limit) {
         FlowPane itemList = new FlowPane();
-        itemList.setMinSize(1200, 300);
-        itemList.setPrefSize(1200, 300);
+        itemList.setMinHeight(300);
         itemList.setHgap(10);
         itemList.setVgap(10);
 
