@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Properties;
 
 import static com.jsthijs.beroepsproduct02.Application.dbTags;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -23,30 +24,25 @@ public class Database {
     private Connection conn;
     private Statement stmt;
 
-    public Database(String host, String port, String user, String passwd, String dbname) {
-        // Basis configuratie bewaren.
-        this.host = host;
-        this.port = port;
-        this.user = user;
-        this.passwd = passwd;
-        this.dbname = dbname;
-
+    public Database() {
         try {
+            // laad de gegevens uit de properties bestand
+            Properties props = new Properties();
+            props.load(getClass().getResourceAsStream("databaseCredentials.properties"));
+
+            host = props.getProperty("db.host");
+            port = props.getProperty("db.port");
+            dbname = props.getProperty("db.database");
+            user = props.getProperty("db.username");
+            passwd = props.getProperty("db.password");
+
             // Verbind met de database.
             this.conn = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + dbname, user, passwd);
             // Maak een statement voor eenvoudige queries.
             this.stmt = this.conn.createStatement();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Database(String host, String user, String passwd, String dbname) {
-        this(host, "3306", user, passwd, dbname);
-    }
-
-    public Database(String host, String user, String dbname) {
-        this(host, "3306", user, "", dbname);
     }
 
     // Item-logica.
