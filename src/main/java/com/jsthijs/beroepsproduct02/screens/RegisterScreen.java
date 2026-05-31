@@ -17,21 +17,25 @@ import java.sql.SQLException;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
+// Registratiescherm voor nieuwe gebruikers.
 public class RegisterScreen implements Screen{
     private final Scene scene;
 
     public RegisterScreen() {
+        // Root container opzetten.
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
         root.setVgap(10);
         ApplyStylesheet(this.scene);
 
+        // Foutmelding voor onjuiste invoer.
         FlowPane alert = new FlowPane(new Text("gegevens incorrect"));
         alert.setMinWidth(window_size[0]);
         alert.setAlignment(Pos.CENTER);
         alert.setVisible(false);
 
+        // Grid met invoervelden.
         GridPane registerPane = new GridPane();
         registerPane.setPrefSize(450, 225);
         registerPane.setPadding(new Insets(150, 0, 0, 0));
@@ -90,6 +94,7 @@ public class RegisterScreen implements Screen{
         TextField phoneNumber = new TextField();
         phoneNumber.getStyleClass().addAll("h3", "txtfield");
         phoneNumber.setPromptText("Telefoonnummer");
+        // Alleen cijfers toestaan in het telefoonnummerveld.
         phoneNumber.setTextFormatter(new TextFormatter<>(change -> {
             if (change.getText().matches("[0-9]*")) { return change; }
             return null;
@@ -113,6 +118,7 @@ public class RegisterScreen implements Screen{
         registerButton.getStyleClass().add("btn");
         GridPane.setHalignment(registerButton, HPos.CENTER);
         registerButton.setOnMouseClicked(e -> {
+            // Maak een tijdelijke gebruiker op basis van het formulier.
             User tempUser = new User(
                     username.getText(),
                     password.getText(),
@@ -123,9 +129,12 @@ public class RegisterScreen implements Screen{
             );
 
             try {
+                // Sla de gebruiker op, log in en navigeer naar het profiel.
                 if (db.addUser(tempUser)) {
+                    // Inloggen met de nieuwe gebruiker.
                     ResultSet rs = db.loginUser(tempUser.getUsername(), tempUser.getPassword());
                     if (rs.next()) {
+                        // Gebruiker in sessie zetten.
                         user = new User(rs);
                         NavigateTo(new ProfileScreen(user.getId()));
                     }

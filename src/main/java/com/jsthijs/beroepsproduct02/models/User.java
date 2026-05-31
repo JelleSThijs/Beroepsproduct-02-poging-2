@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import static com.jsthijs.beroepsproduct02.Application.db;
 import static com.jsthijs.beroepsproduct02.Application.user;
 
+// Model voor een gebruiker en basisacties.
 public class User {
     private int id;
     private String username;
@@ -26,7 +27,9 @@ public class User {
         this.city = city; // deze velden zijn optioneel
     }
 
+    // Maakt een user op basis van een database-resultaat.
     public User(ResultSet rs) throws SQLException {
+            // Velden uitlezen uit het resultaat.
             id = rs.getInt("id");
             username = rs.getString("username");
             password = rs.getString("password");
@@ -37,47 +40,59 @@ public class User {
             isAdmin = rs.getInt("isAdmin");
     }
 
+    // Verwijdert een item als de gebruiker rechten heeft.
     public void deleteItem(Item item) {
+        // Alleen eigenaar of admin mag verwijderen.
         if (this.id == item.getUserId() || this.isAdmin == 1) {
             db.deleteItem(item.getId());
         }
     }
 
+    // Alleen admins mogen een gebruiker verwijderen.
     public void deleteUser(int userId) {
+        // Admin-check voor verwijdering.
         if (this.isAdmin == 1) {
             db.deleteUser(userId);
         }
     }
 
     public int getId() {
+        // ID teruggeven.
         return this.id;
     }
 
     public String getUsername() {
+        // Username teruggeven.
         return username;
     }
 
     public String getPassword() {
+        // Password teruggeven.
         return password;
     }
 
     public String getName() {
+        // Naam teruggeven.
         return name;
     }
 
     public String getEmail() {
+        // Email teruggeven.
         return email;
     }
 
     public String getPhoneNumber() {
+        // Telefoonnummer teruggeven.
         return phoneNumber;
     }
 
     public String getCity() {
+        // Woonplaats teruggeven.
         return city;
     }
 
     public int getIsAdmin() {
+        // Admin status teruggeven.
         return isAdmin;
     }
 }

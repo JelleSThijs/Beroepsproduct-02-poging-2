@@ -1,5 +1,7 @@
 package com.jsthijs.beroepsproduct02.screens;
 
+// Profielscherm met gebruikersinformatie en items.
+
 import com.jsthijs.beroepsproduct02.models.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,6 +25,7 @@ public class ProfileScreen implements Screen {
     public ProfileScreen(int userId) {
         this.userId = userId;
 
+        // Root container voor het profiel.
         VBox root = new VBox();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
@@ -30,8 +33,10 @@ public class ProfileScreen implements Screen {
         ApplyStylesheet(this.scene);
         root.getChildren().add(header);
 
+        // Alleen tonen als er een ingelogde gebruiker is.
         if (user != null) {
             if (user.getId() == this.userId || user.getIsAdmin() == 1) {
+                // CRUD knoppen voor items van deze gebruiker.
                 FlowPane crudPane = new FlowPane();
                 crudPane.setHgap(10);
                 crudPane.setPrefWidth(window_size[0]);
@@ -53,6 +58,7 @@ public class ProfileScreen implements Screen {
                 crudPane.getChildren().addAll(newButton, editButton, deleteItemButton);
 
                 if (user.getIsAdmin() == 1 && this.userId != user.getId()) {
+                    // Admins kunnen ook andere gebruikers verwijderen.
                     Button deleteUserButton = new Button("Verwijder Gebruiker");
                     deleteUserButton.setOnAction(e -> {
                         deleteUserAlert(this.userId);
@@ -66,10 +72,12 @@ public class ProfileScreen implements Screen {
             }
         }
 
+        // Lijst met items van de gebruiker.
         VBox items = new VBox(itemList(this.userId));
         items.setPadding(new Insets(16, 120, 16, 120));
         items.setSpacing(8);
 
+        // Scrollbare content.
         ScrollPane scrollPane = new ScrollPane(items);
         scrollPane.setFitToWidth(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -81,12 +89,14 @@ public class ProfileScreen implements Screen {
     }
 
     private Pane itemList(Integer userId) {
+        // Flowpane voor items.
         FlowPane itemList = new FlowPane();
         itemList.setMaxWidth(1160);
         itemList.setHgap(10);
         itemList.setVgap(10);
 
         try {
+            // Items ophalen.
             ResultSet rs = db.getUserItems(this.userId);
             while (rs.next()) {
                 Item item = new Item(rs);
@@ -94,6 +104,7 @@ public class ProfileScreen implements Screen {
                 itemPane.setSpacing(4);
                 if (user != null) {
                     if (user.getId() == this.userId || user.getIsAdmin() == 1) {
+                        // Selecteerknop voor bewerken/verwijderen.
                         RadioButton rb = new RadioButton("Selecteer item");
                         rb.setUserData(item);
                         rb.setToggleGroup(this.toggleGroup);
@@ -102,6 +113,7 @@ public class ProfileScreen implements Screen {
                     }
                 }
 
+                // Itemkaart toevoegen.
                 itemPane.getChildren().add(item.renderItem());
                 itemList.getChildren().add(itemPane);
             }
@@ -110,15 +122,9 @@ public class ProfileScreen implements Screen {
         return itemList;
     }
 
-    public Scene getScene() {
-        return this.scene;
-    }
-
-    public String getTitle() {
-        return "User Profile";
-    }
-
+    // Bevestiging voor item verwijderen.
     private void deleteItemAlert(Item item) {
+        // Dialoog openen.
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Bevestig verwijdering");
         alert.setHeaderText(null);
@@ -132,7 +138,9 @@ public class ProfileScreen implements Screen {
         }
     }
 
+    // Bevestiging voor gebruiker verwijderen.
     private void deleteUserAlert(int userId) {
+        // Dialoog openen.
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Bevestig verwijdering gebruiker");
         alert.setHeaderText(null);

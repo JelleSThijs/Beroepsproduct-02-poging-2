@@ -1,5 +1,7 @@
 package com.jsthijs.beroepsproduct02.screens;
 
+// Scherm voor het aanmaken van een nieuw item.
+
 import com.jsthijs.beroepsproduct02.models.Item;
 
 import javafx.geometry.Insets;
@@ -28,16 +30,19 @@ public class NewScreen implements Screen {
 
 
     public NewScreen() {
+        // Root van het scherm.
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
         ApplyStylesheet(this.scene);
 
+        // Container voor velden en lijst.
         HBox itemPane =  new HBox();
         itemPane.setAlignment(Pos.CENTER);
         itemPane.setPrefSize(window_size[0], 550);
         itemPane.setMaxSize(window_size[0], 550);
 
+        // Container voor inputvelden.
         FlowPane inputs = new FlowPane();
         inputs.setPrefSize(700, 550);
         inputs.setMaxSize(700, 550);
@@ -46,6 +51,7 @@ public class NewScreen implements Screen {
         inputs.setHgap(10);
         inputs.setVgap(24);
 
+        // Styling voor titel en afbeelding.
         title.getStyleClass().addAll("h2", "txtfield");
         imagePath.getStyleClass().addAll("h3", "txtfield");
 
@@ -54,6 +60,7 @@ public class NewScreen implements Screen {
 
         imagePath.setPromptText("Link naar foto / poster");
 
+        // Rij met korte velden.
         HBox shortInputBox = new HBox();
         shortInputBox.setSpacing(25);
         shortInputBox.setAlignment(Pos.CENTER_LEFT);
@@ -65,6 +72,7 @@ public class NewScreen implements Screen {
         releaseYear.setPromptText("Jaar");
         releaseYear.setPrefSize(100, 32);
         releaseYear.getStyleClass().addAll("h3", "txtfield");
+        // Beperk jaar invoer tot cijfers en max 4 tekens.
         releaseYear.setTextFormatter(new TextFormatter<>(change -> {
             if (change.getText().matches("[0-9]*") && change.getControlNewText().length() <= 4) {
                 return change;
@@ -82,21 +90,26 @@ public class NewScreen implements Screen {
         summary.setPrefSize(600, 240);
         summary.getStyleClass().add("h3");
 
+        // Eigenaar-tekst tonen.
         FlowPane ownerDetails = new FlowPane(
                 new Text("Eigenaar: " + user.getName() + " in " + user.getCity())
         );
         ownerDetails.setPadding(new Insets(0, 0, 0, 6));
         ownerDetails.getStyleClass().add("h2");
 
+        // Tags selecteren.
         genre.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         genre.setMaxHeight(440);
         genre.getStyleClass().add("h3");
 
+        // Tags vullen uit de database.
         dbTags.getName().forEach(tagName -> { genre.getItems().add(tagName); });
 
         save.setOnAction(e -> { saveItem(); });
+        // Opslaan knop voor het item.
         save.getStyleClass().addAll("btn", "h3");
 
+        // Onderdelen samenstellen.
         shortInputBox.getChildren().addAll(maker, releaseYear, type);
         inputs.getChildren().addAll(title, imagePath, shortInputBox, summary, ownerDetails);
         itemPane.getChildren().addAll(inputs, genre);
@@ -104,7 +117,9 @@ public class NewScreen implements Screen {
 
     }
 
+    // Maakt een nieuw item aan en slaat dit op.
     private void saveItem() {
+        // Geselecteerde tags ophalen.
         ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
         Item item = new Item(
                 title.getText(),
@@ -117,6 +132,7 @@ public class NewScreen implements Screen {
                 itemTags
         );
 
+        // Opslaan in de database.
         db.addItem(item);
         db.setItemTags(item.getId(), itemTags);
         NavigateTo(new ProfileScreen(user.getId()));

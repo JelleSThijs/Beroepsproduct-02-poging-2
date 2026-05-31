@@ -18,19 +18,23 @@ import java.util.Objects;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
+// Zoekscherm met filters en resultaten.
 public class SearchScreen implements Screen {
     private final Scene scene;
 
     public SearchScreen(String searchText, String tag, String releaseYear, String type) {
+        // Root van het zoekscherm.
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         ApplyStylesheet(this.scene);
 
+        // Resultaten container.
         VBox vbox = new VBox(itemList(searchText, tag, releaseYear, type));
         vbox.setPrefWidth(window_size[0]);
         vbox.setPadding(new Insets(16, 120, 16, 120));
         vbox.setAlignment(Pos.TOP_CENTER);
 
+        // Scrollpane voor resultaten.
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefSize(window_size[0], Double.MAX_VALUE);
 
@@ -39,13 +43,16 @@ public class SearchScreen implements Screen {
 
     }
 
+    // Haalt zoekresultaten op en bouwt de lijst.
     private Pane itemList(String searchText, String tag, String releaseYear, String type) {
+        // Flowpane voor de kaarten.
         FlowPane itemList = new FlowPane();
         itemList.setMaxWidth(1160);
         itemList.setHgap(10);
         itemList.setVgap(10);
 
         try {
+            // Query uitvoeren.
             ResultSet rs = db.getSearchResults(searchText, tag, releaseYear, type);
             while(rs.next()){
                 itemList.getChildren().add(new Item(rs).renderItem());

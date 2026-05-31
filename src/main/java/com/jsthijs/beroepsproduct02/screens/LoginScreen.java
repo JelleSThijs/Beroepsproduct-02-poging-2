@@ -18,21 +18,25 @@ import java.sql.SQLException;
 
 import static com.jsthijs.beroepsproduct02.Application.*;
 
+// Scherm voor inloggen en navigatie naar registratie.
 public class LoginScreen implements Screen{
     private final Scene scene;
 
     public LoginScreen() {
+        // Root container opzetten.
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
         root.setVgap(10);
         ApplyStylesheet(this.scene);
 
+        // Foutmelding voor onjuiste inlog.
         FlowPane alert = new FlowPane(new Text("gegevens incorrect"));
         alert.setMinWidth(window_size[0]);
         alert.setAlignment(Pos.CENTER);
         alert.setVisible(false);
 
+        // Grid met velden en knoppen.
         GridPane loginPane = new GridPane();
         loginPane.setPrefSize(350, 225);
         loginPane.setPadding(new Insets(250, 0, 0, 0));
@@ -78,12 +82,15 @@ public class LoginScreen implements Screen{
         GridPane.setHalignment(loginButton, HPos.CENTER);
         loginButton.setOnMouseClicked(e -> {
             try {
+                // Controleer inloggegevens en navigeer bij succes.
                 ResultSet rs = db.loginUser(username.getText(), password.getText());
                 if (rs.next()) {
+                    // Gebruiker opslaan in de sessie.
                     user = new User(rs);
                     NavigateTo(new ProfileScreen(user.getId()));
                 }
                 else {
+                    // Toon foutmelding als de login niet klopt.
                     username.setStyle("-fx-text-fill: red;");
                     password.setStyle("-fx-text-fill: red;");
                     alert.setVisible(true);

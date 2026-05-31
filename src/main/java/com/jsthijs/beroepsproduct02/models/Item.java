@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+// Model voor een item met render-logica voor de UI.
 public class Item {
     private Integer id;
     private String name;
@@ -40,10 +41,10 @@ public class Item {
         this.tags = tags;
     }
 
-    // maak een nieuw item class aan vanuit een bestaand item uit de database
+    // Maakt een item aan vanuit een bestaand item uit de database.
     public Item(ResultSet rs) throws SQLException {
         try {
-            // itemgegevens zetten
+            // Itemgegevens lezen uit de database.
             this.id = rs.getInt("id");
             this.name = rs.getString("name");
             this.summary = rs.getString("summary");
@@ -53,7 +54,7 @@ public class Item {
             this.type = rs.getString("type");
             this.userId = rs.getInt("userId");
 
-            // item tags ophalen
+            // Item tags ophalen en vullen.
             this.tags = new ArrayList<>();
             ResultSet tagRs = db.getItemTags(this.id);
             while (tagRs.next()) {
@@ -63,7 +64,9 @@ public class Item {
         } catch (Exception e) { throw new SQLException(e); }
     }
 
+    // Bouwt de kaart voor weergave in lijsten.
     public Pane renderItem() {
+        // Container voor de itemkaart.
         FlowPane itemPane = new FlowPane();
         itemPane.setMinWidth(144);
         itemPane.setPrefWidth(144);
@@ -72,17 +75,19 @@ public class Item {
         itemPane.setVgap(4);
         itemPane.setId("item-small");
 
+        // Stack voor afbeelding en tag.
         StackPane itemStack = new StackPane();
         itemStack.setPrefSize(144, 196);
         itemStack.setAlignment(Pos.BOTTOM_RIGHT);
         itemPane.getChildren().add(itemStack);
 
-        // probeerd een foto op te halen anders wordt er een grijs vlak gerendered
+        // Probeert een foto op te halen, anders wordt er een grijs vlak gerenderd.
         try {
             ImageView itemImg = new ImageView(this.getImage());
             itemImg.setFitWidth(144);
             itemImg.setFitHeight(196);
 
+            // Afronding met clip.
             Rectangle clip = new Rectangle(144, 196);
             clip.setArcWidth(40);
             clip.setArcHeight(40);
@@ -90,6 +95,7 @@ public class Item {
 
             itemStack.getChildren().add(itemImg);
         } catch (Exception e) {
+            // Fallback placeholder als afbeelding niet kan laden.
             Region itemImg = new Region();
             itemImg.setPrefSize(144, 196);
             itemImg.setStyle("-fx-background-color: lightgray; -fx-border-radius: 20; -fx-background-radius: 20");
@@ -97,12 +103,14 @@ public class Item {
             itemStack.getChildren().add(itemImg);
         }
 
+        // Titelblok toevoegen.
         FlowPane itemTitle = new FlowPane(new Text(this.getName()));
         itemTitle.setPrefWidth(144);
         itemTitle.setAlignment(Pos.CENTER_LEFT);
         itemTitle.getStyleClass().addAll("h3", "txtfield");
         itemPane.getChildren().add(itemTitle);
 
+        // Tags toevoegen; typeTag gaat in de stack.
         renderTags().forEach(tag -> {
             if (tag.getId() != null && tag.getId().equals("typeText")) {
                 tag.setStyle("-fx-background-color: -color-licht; -fx-border-color: -color-schaduw");
@@ -110,23 +118,26 @@ public class Item {
             } else { itemPane.getChildren().add(tag); }
         });
 
+        // Klik opent de detailpagina.
         itemPane.setOnMouseClicked(e -> {
-            // navigeer naar de detailscherm van dit item
             NavigateTo(new ItemScreen(this));
         });
 
         return itemPane;
     }
 
+    // Maakt label-tags aan met styling en wrapping.
     public ArrayList<Label> renderTags() {
         ArrayList<Label> tags = new ArrayList<>();
 
+        // Type-tag (badge op de afbeelding).
         Label typeText = new Label(this.getType());
         typeText.getStyleClass().add("tag");
         typeText.setId("typeText");
         typeText.setStyle("-fx-background-color: lightblue; -fx-border-color: blue");
         tags.add(typeText);
 
+        // Maker-tag.
         Label makerText = new Label(this.getMaker());
         makerText.getStyleClass().add("tag");
         makerText.setStyle("-fx-background-color: lightpink; -fx-border-color: purple");
@@ -134,6 +145,7 @@ public class Item {
         makerText.setWrapText(true);
         tags.add(makerText);
 
+        // Jaar-tag.
         Label releaseYearText = new Label(this.getReleaseYear().toString());
         releaseYearText.getStyleClass().add("tag");
         releaseYearText.setStyle("-fx-background-color: lightyellow; -fx-border-color: yellow");
@@ -141,6 +153,7 @@ public class Item {
         releaseYearText.setWrapText(true);
         tags.add(releaseYearText);
 
+        // Extra tags uit de lijst.
         this.getTags().forEach(tag -> {
             Label tagText = new Label(tag);
             tagText.getStyleClass().add("tag");
