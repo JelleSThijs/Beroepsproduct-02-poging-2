@@ -89,7 +89,8 @@
     -fx-padding: 8 12 8 -16;
 }
 
-.icon, .btn, .txtfield {
+.icon, .btn, .txtfield,
+.alert .button-bar .button {
     -fx-background-color: -color-licht;
     -fx-border-color: -color-schaduw;
     -fx-padding: 8px;
@@ -101,12 +102,14 @@
     -fx-padding: 4px 16px;
 }
 
-.icon:hover, .btn:hover {
+.icon:hover, .btn:hover,
+.alert .button-bar .button:hover {
     -fx-background-color: -color-schaduw;
     -fx-text-fill: -color-licht;
 }
 
-.icon:pressed, .btn:pressed {
+.icon:pressed, .btn:pressed,
+.alert .button-bar .button:pressed {
     -fx-background-color: -color-donker;
     -fx-border-color: -color-donker;
     -fx-text-fill: -color-licht;

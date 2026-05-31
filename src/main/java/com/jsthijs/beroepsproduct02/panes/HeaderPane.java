@@ -24,9 +24,10 @@ public class HeaderPane {
     public HeaderPane() {
     // header flowpane aanmaken
         FlowPane headerPane = new FlowPane();
-        headerPane.setPrefSize(window_size[0], 112);
+        headerPane.setPrefWidth(window_size[0]);
         headerPane.setAlignment(Pos.CENTER);
         headerPane.setHgap(32);
+        headerPane.setPadding(new javafx.geometry.Insets(8));
         headerPane.setStyle("-fx-background-color: #f0f0f0;");
 
     // Children aanmaken

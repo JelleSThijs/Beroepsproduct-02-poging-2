@@ -28,6 +28,7 @@ public class SearchScreen implements Screen {
 
         VBox vbox = new VBox(itemList(searchText, tag, releaseYear, type));
         vbox.setPrefWidth(window_size[0]);
+        vbox.setPadding(new Insets(16, 120, 16, 120));
         vbox.setAlignment(Pos.TOP_CENTER);
 
         ScrollPane scrollPane = new ScrollPane();

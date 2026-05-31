@@ -30,6 +30,7 @@ public class ProfileScreen implements Screen {
         root.setAlignment(Pos.TOP_CENTER);
         root.setVgap(10);
         ApplyStylesheet(this.scene);
+        root.getChildren().add(header);
 
         if (user.getId() == this.userId) {
             FlowPane crudPane = new FlowPane();
@@ -62,7 +63,7 @@ public class ProfileScreen implements Screen {
         scrollPane.setPrefSize(window_size[0], Double.MAX_VALUE);
 
         scrollPane.setContent(vbox);
-        root.getChildren().addAll(header, scrollPane);
+        root.getChildren().add(scrollPane);
 
     }
 

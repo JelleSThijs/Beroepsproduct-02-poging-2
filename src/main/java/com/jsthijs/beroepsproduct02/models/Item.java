@@ -130,17 +130,23 @@ public class Item {
         Label makerText = new Label(this.getMaker());
         makerText.getStyleClass().add("tag");
         makerText.setStyle("-fx-background-color: lightpink; -fx-border-color: purple");
+        makerText.setMaxWidth(144);
+        makerText.setWrapText(true);
         tags.add(makerText);
 
         Label releaseYearText = new Label(this.getReleaseYear().toString());
         releaseYearText.getStyleClass().add("tag");
         releaseYearText.setStyle("-fx-background-color: lightyellow; -fx-border-color: yellow");
+        releaseYearText.setMaxWidth(144);
+        releaseYearText.setWrapText(true);
         tags.add(releaseYearText);
 
         this.getTags().forEach(tag -> {
             Label tagText = new Label(tag);
             tagText.getStyleClass().add("tag");
             tagText.setStyle("-fx-background-color: lightsalmon;  -fx-border-color: red");
+            tagText.setMaxWidth(144);
+            tagText.setWrapText(true);
             tags.add(tagText);
         });
 

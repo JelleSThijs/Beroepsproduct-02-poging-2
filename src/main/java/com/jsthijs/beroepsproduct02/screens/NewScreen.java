@@ -46,6 +46,9 @@ public class NewScreen implements Screen {
         inputs.setHgap(10);
         inputs.setVgap(24);
 
+        title.getStyleClass().addAll("h2", "txtfield");
+        imagePath.getStyleClass().addAll("h3", "txtfield");
+
         title.setPromptText("Titel");
         title.setPrefWidth(600);
 
@@ -53,31 +56,40 @@ public class NewScreen implements Screen {
 
         HBox shortInputBox = new HBox();
         shortInputBox.setSpacing(25);
+        shortInputBox.setAlignment(Pos.CENTER_LEFT);
 
         maker.setPromptText("Uitgever / Schrijver");
-        maker.setPrefSize(450, 32);
+        maker.setPrefSize(300, 32);
+        maker.getStyleClass().addAll("h3", "txtfield");
 
         releaseYear.setPromptText("Jaar");
-        releaseYear.setPrefSize(50, 32);
-        releaseYear.setMaxSize(50, 32);
+        releaseYear.setPrefSize(100, 32);
+        releaseYear.getStyleClass().addAll("h3", "txtfield");
 
         type.getItems().addAll("boek", "film");
-        type.setPrefSize(50, 32);
+        type.setPrefSize(100, 32);
         type.setValue("boek");
+        type.getStyleClass().addAll("h3", "dropdown");
 
 
         summary.setPromptText("Samenvatting");
         summary.setPrefSize(600, 240);
+        summary.getStyleClass().add("h3");
 
-        FlowPane ownerDetails = new FlowPane(new Text(user.getName() + " in " + user.getCity()));
+        FlowPane ownerDetails = new FlowPane(
+                new Text("Eigenaar: " + user.getName() + " in " + user.getCity())
+        );
         ownerDetails.setPadding(new Insets(0, 0, 0, 6));
+        ownerDetails.getStyleClass().add("h2");
 
         genre.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         genre.setMaxHeight(440);
+        genre.getStyleClass().add("h3");
 
         dbTags.getName().forEach(tagName -> { genre.getItems().add(tagName); });
 
         save.setOnAction(e -> { saveItem(); });
+        save.getStyleClass().addAll("btn", "h3");
 
         shortInputBox.getChildren().addAll(maker, releaseYear, type);
         inputs.getChildren().addAll(title, imagePath, shortInputBox, summary, ownerDetails);
