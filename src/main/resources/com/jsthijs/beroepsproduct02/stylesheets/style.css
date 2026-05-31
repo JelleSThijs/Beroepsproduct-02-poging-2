@@ -8,10 +8,9 @@
     -font-heading:  "Verdana";
     -font-body:     "Lato";
 
-    /* standaard waarde */
-    background-color: -color-licht;
-    -fx-font-family: -font-body;
-    -fx-font-size: 24px;
+    /* standaard font waarden */
+    -fx-font-family: "Lato";
+    -fx-font-size: 12px;
     -fx-text-fill: -color-donker;
 }
 
@@ -21,7 +20,7 @@
 /* H1 – Verdana Bold 48px */
 .h1 {
     -fx-font-family: "Verdana";
-    -fx-font-size: 48px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: -color-donker;
 }
@@ -29,7 +28,7 @@
 /* H2 – Verdana 36px */
 .h2 {
     -fx-font-family: "Verdana";
-    -fx-font-size: 36px;
+    -fx-font-size: 18px;
     -fx-font-weight: normal;
     -fx-text-fill: -color-donker;
 }
@@ -37,145 +36,32 @@
 /* H3 – Lato 32px */
 .h3 {
     -fx-font-family: "Lato";
-    -fx-font-size: 32px;
+    -fx-font-size: 16px;
     -fx-font-weight: normal;
     -fx-text-fill: -color-donker;
 }
 
-/* Body text – Lato 24px */
-.text,
-.label {
-    -fx-font-family: "Lato";
-    -fx-font-size: 24px;
-    -fx-text-fill: -color-donker;
-}
-
 /* ──────────────────────────────────────────────
-   KNOPPEN (Buttons)
+   Elementen
    ────────────────────────────────────────────── */
-.button {
-    -fx-font-family: "Verdana";
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
+.dropdown {
     -fx-text-fill: -color-donker;
+    -fx-prompt-text-fill: -color-donker;
     -fx-background-color: -color-licht;
-    -fx-border-color: -color-donker;
-    -fx-border-width: 2px;
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-padding: 14px 32px;
-    -fx-cursor: hand;
-}
-
-.button:hover {
-    -fx-background-color: -color-schaduw;
-    -fx-text-fill: -color-donker;
     -fx-border-color: -color-schaduw;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+
 }
 
-.button:armed,
-.button:pressed {
-    -fx-background-color: -color-donker;
-    -fx-text-fill: -color-licht;
-    -fx-border-color: -color-donker;
+.dropdown .arrow, .dropdown .arrow-button {
+    -fx-background-color: none;   /* colour */
 }
 
-.button:focused {
-    -fx-border-color: -color-donker;
-    -fx-border-width: 3px;
-}
-
-/* ──────────────────────────────────────────────
-   INVOER VELDEN (Text Fields)
-   ────────────────────────────────────────────── */
-.text-field {
-    -fx-font-family: "Verdana";
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-donker;
+.icon {
     -fx-background-color: -color-licht;
-    -fx-border-color: -color-donker;
-    -fx-border-width: 2px;
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-padding: 14px 24px;
-    -fx-prompt-text-fill: -color-schaduw;
-}
-
-/* Invoer velden, erop geklikt (focused) */
-.text-field:focused {
-    -fx-background-color: -color-licht;
-    -fx-border-color: -color-donker;
-    -fx-border-width: 3px;
-}
-
-/* ──────────────────────────────────────────────
-   DROPDOWN MENU (ComboBox)
-   ────────────────────────────────────────────── */
-.combo-box {
-    -fx-font-family: "Verdana";
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-donker;
-    -fx-background-color: -color-licht;
-    -fx-border-color: -color-donker;
-    -fx-border-width: 2px;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-padding: 4px 0px;
-}
-
-/* Arrow button area */
-.combo-box .arrow-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0 12px;
-}
-
-.combo-box .arrow {
-    -fx-background-color: -color-donker;
-    -fx-shape: "M0 0 L10 0 L5 6 Z";   /* chevron-down */
-}
-
-/* Dropdown, geselecteerd – the list popup */
-.combo-box-popup .list-view {
-    -fx-background-color: -color-licht;
-    -fx-border-color: -color-donker;
-    -fx-border-width: 2px;
-    -fx-background-radius: 0 0 8px 8px;
-    -fx-border-radius: 0 0 8px 8px;
-    -fx-effect: dropshadow(gaussian, rgba(25,25,24,0.12), 8, 0, 2, 4);
-}
-
-.combo-box-popup .list-view .list-cell {
-    -fx-font-family: "Verdana";
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-donker;
-    -fx-background-color: -color-licht;
-    -fx-padding: 12px 24px;
     -fx-border-color: -color-schaduw;
-    -fx-border-width: 0 0 1px 0;
-}
-
-.combo-box-popup .list-view .list-cell:hover {
-    -fx-background-color: -color-schaduw;
-}
-
-.combo-box-popup .list-view .list-cell:selected,
-.combo-box-popup .list-view .list-cell:focused {
-    -fx-background-color: -color-donker;
-    -fx-text-fill: -color-licht;
-}
-
-/* ──────────────────────────────────────────────
-   UTILITY CLASSES
-   ────────────────────────────────────────────── */
-.item-small {
-    -fx-background-color: -color-licht;
-    -fx-border-color: -color-donker;
-    -fx-border-width: 2px;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-padding: 20px;
-    -fx-effect: dropshadow(gaussian, rgba(25,25,24,0.10), 8, 0, 2, 4);
+    -fx-padding: 4px;
+    -fx-border-radius: 100%;
+    -fx-background-radius: 100%;
 }
