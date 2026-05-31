@@ -128,6 +128,10 @@
     -fx-background-radius: 100;
 }
 
-.radiobtn .radio:hover{
+.radiobtn .radio:hover {
     -fx-background-color: -color-schaduw;
+}
+
+.hyperlink:hover {
+    -fx-underline: true;
 }

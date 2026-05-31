@@ -91,9 +91,13 @@ public class ItemScreen implements Screen {
         try {
             ResultSet rs = db.getItemOwnerDetails(item.getUserId());
             if (rs.next()) {
-                Text ownerTxt =
-                    new Text("Eigenaar: " + rs.getString("name") + " In " + rs.getString("city"));
-                ownerTxt.getStyleClass().add("h2");
+                Label ownerTxt =
+                    new Label("Eigenaar: " + rs.getString("name") + " In " + rs.getString("city"));
+                ownerTxt.getStyleClass().addAll("h2", "hyperlink");
+                ownerTxt.setOnMouseClicked(mouseEvent -> {
+                    NavigateTo(new ProfileScreen(this.item.getUserId()));
+                });
+
                 itemOwnerPane.getChildren().add(ownerTxt);
 
                 itemOwnerPhonenumber = rs.getString("phonenumber");
