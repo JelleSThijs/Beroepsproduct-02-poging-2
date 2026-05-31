@@ -9,6 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
@@ -72,14 +74,21 @@ public class Item {
         // probeerd een foto op te halen anders wordt er een grijs vlak gerendered
         try {
             ImageView itemImg = new ImageView(this.getImage());
-            itemImg.setFitHeight(196);
             itemImg.setFitWidth(144);
+            itemImg.setFitHeight(196);
+
+            Rectangle clip = new Rectangle(144, 196);
+            clip.setArcWidth(20);
+            clip.setArcHeight(20);
+            itemImg.setClip(clip);
+
             itemPane.getChildren().add(itemImg);
         } catch (Exception e) {
             Region itemImg = new Region();
             itemImg.setPrefHeight(196);
             itemImg.setPrefWidth(144);
             itemImg.setStyle("-fx-background-color: lightgray;");
+            itemImg.getStyleClass().add("img");
             itemPane.getChildren().add(itemImg);
         }
 
@@ -120,7 +129,7 @@ public class Item {
         this.getTags().forEach(tag -> {
             Label tagText = new Label(tag);
             tagText.getStyleClass().add("tag");
-            tagText.setStyle("-fx-background-color: lightcoral;  -fx-border-color: red");
+            tagText.setStyle("-fx-background-color: lightsalmon;  -fx-border-color: red");
             tags.add(tagText);
         });
 
