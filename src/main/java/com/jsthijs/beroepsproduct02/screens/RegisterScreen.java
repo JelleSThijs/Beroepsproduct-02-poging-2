@@ -10,8 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.sql.ResultSet;
@@ -124,12 +122,15 @@ public class RegisterScreen implements Screen{
                     city.getText()
             );
 
-            if (db.addUser(tempUser)) {
-                try {
-                    user = new User(db.loginUser(tempUser.getUsername(), tempUser.getPassword()));
-                    NavigateTo(new ProfileScreen(user.getId()));
-                } catch (SQLException ex) { throw new RuntimeException(ex); }
-            }
+            try {
+                if (db.addUser(tempUser)) {
+                    ResultSet rs = db.loginUser(tempUser.getUsername(), tempUser.getPassword());
+                    if (rs.next()) {
+                        user = new User(rs);
+                        NavigateTo(new ProfileScreen(user.getId()));
+                    }
+                }
+            } catch (SQLException ex) { throw new RuntimeException(ex); }
         });
 
         registerPane.add(registerButton, 0, 7, 2, 1);
