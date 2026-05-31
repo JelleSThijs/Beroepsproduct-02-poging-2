@@ -4,10 +4,7 @@ import com.jsthijs.beroepsproduct02.models.Item;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -33,27 +30,29 @@ public class ProfileScreen implements Screen {
         ApplyStylesheet(this.scene);
         root.getChildren().add(header);
 
-        if (user.getId() == this.userId) {
-            FlowPane crudPane = new FlowPane();
-            crudPane.setHgap(10);
-            crudPane.setPrefWidth(window_size[0]);
-            crudPane.setAlignment(Pos.CENTER);
+        if (user != null) {
+            if (user.getId() == this.userId || user.getIsAdmin() == 1) {
+                FlowPane crudPane = new FlowPane();
+                crudPane.setHgap(10);
+                crudPane.setPrefWidth(window_size[0]);
+                crudPane.setAlignment(Pos.CENTER);
 
-            Button newButton = new Button("Nieuw");
-            newButton.setOnAction(e -> { NavigateTo(new NewScreen()); });
+                Button newButton = new Button("Nieuw");
+                newButton.setOnAction(e -> { NavigateTo(new NewScreen()); });
 
-            Button editButton = new Button("Edit");
-            editButton.setOnAction(e -> {
-                NavigateTo(new EditScreen((Item) this.toggleGroup.getSelectedToggle().getUserData()));
-            });
+                Button editButton = new Button("Edit");
+                editButton.setOnAction(e -> {
+                    NavigateTo(new EditScreen((Item) this.toggleGroup.getSelectedToggle().getUserData()));
+                });
 
             Button deleteButton = new Button("Verwijder");
             deleteButton.setOnAction(e -> {
                 user.deleteItem((Item) this.toggleGroup.getSelectedToggle().getUserData());
             });
 
-            crudPane.getChildren().addAll(deleteButton, editButton, newButton);
-            root.getChildren().add(crudPane);
+                crudPane.getChildren().addAll(deleteButton, editButton, newButton);
+                root.getChildren().add(crudPane);
+            }
         }
 
         VBox items = new VBox(itemList(this.userId));
@@ -82,12 +81,14 @@ public class ProfileScreen implements Screen {
                 Item item = new Item(rs);
                 VBox itemPane = new VBox();
                 itemPane.setSpacing(4);
-                if (user.getId() == this.userId) {
-                    RadioButton rb = new RadioButton("Selecteer item");
-                    rb.setUserData(item);
-                    rb.setToggleGroup(this.toggleGroup);
-                    rb.getStyleClass().add("radiobtn");
-                    itemPane.getChildren().add(rb);
+                if (user != null) {
+                    if (user.getId() == this.userId || user.getIsAdmin() == 1) {
+                        RadioButton rb = new RadioButton("Selecteer item");
+                        rb.setUserData(item);
+                        rb.setToggleGroup(this.toggleGroup);
+                        rb.getStyleClass().add("radiobtn");
+                        itemPane.getChildren().add(rb);
+                    }
                 }
 
                 itemPane.getChildren().add(item.renderItem());
