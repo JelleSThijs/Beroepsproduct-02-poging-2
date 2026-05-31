@@ -1,6 +1,8 @@
 package com.jsthijs.beroepsproduct02.screens;
 
 import com.jsthijs.beroepsproduct02.models.Item;
+
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,15 +43,18 @@ public class NewScreen implements Screen {
         inputs.setAlignment(Pos.CENTER);
         inputs.setOrientation(Orientation.VERTICAL);
         inputs.setHgap(10);
-        inputs.setVgap(10);
+        inputs.setVgap(24);
 
         title.setPromptText("Titel");
         title.setPrefWidth(600);
 
         imagePath.setPromptText("Link naar foto / poster");
 
+        HBox shortInputBox = new HBox();
+        shortInputBox.setSpacing(25);
+
         maker.setPromptText("Uitgever / Schrijver");
-        maker.setPrefWidth(600);
+        maker.setPrefSize(450, 32);
 
         releaseYear.setPromptText("Jaar");
         releaseYear.setPrefSize(50, 32);
@@ -59,19 +64,22 @@ public class NewScreen implements Screen {
         type.setPrefSize(50, 32);
         type.setValue("boek");
 
+
         summary.setPromptText("Samenvatting");
         summary.setPrefSize(600, 240);
 
-        FlowPane userFullName = new FlowPane(new Text(user.getName()));
+        FlowPane ownerDetails = new FlowPane(new Text(user.getName() + " in " + user.getCity()));
+        ownerDetails.setPadding(new Insets(0, 0, 0, 6));
 
         genre.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        genre.setMaxHeight(425);
+        genre.setMaxHeight(440);
 
         dbTags.getName().forEach(tagName -> { genre.getItems().add(tagName); });
 
         save.setOnAction(e -> { saveItem(); });
 
-        inputs.getChildren().addAll(title, imagePath, maker, releaseYear, type, summary, userFullName);
+        shortInputBox.getChildren().addAll(maker, releaseYear, type);
+        inputs.getChildren().addAll(title, imagePath, shortInputBox, summary, ownerDetails);
         itemPane.getChildren().addAll(inputs, genre);
         root.getChildren().addAll(header, itemPane, save);
 
