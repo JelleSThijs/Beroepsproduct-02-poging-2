@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.sql.ResultSet;
@@ -25,10 +26,10 @@ public class ProfileScreen implements Screen {
     public ProfileScreen(int userId) {
         this.userId = userId;
 
-        FlowPane root = new FlowPane();
+        VBox root = new VBox();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
-        root.setVgap(10);
+        root.setSpacing(10);
         ApplyStylesheet(this.scene);
         root.getChildren().add(header);
 
@@ -55,14 +56,16 @@ public class ProfileScreen implements Screen {
             root.getChildren().add(crudPane);
         }
 
-        VBox vbox = new VBox(itemList(userId));
-        vbox.setPrefWidth(window_size[0]);
-        vbox.setAlignment(Pos.TOP_CENTER);
+        VBox items = new VBox(itemList(this.userId));
+        items.setPadding(new Insets(16, 120, 16, 120));
+        items.setSpacing(8);
 
-        ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setPrefSize(window_size[0], Double.MAX_VALUE);
+        ScrollPane scrollPane = new ScrollPane(items);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        scrollPane.setContent(vbox);
+        scrollPane.setContent(items);
         root.getChildren().add(scrollPane);
 
     }
@@ -78,10 +81,12 @@ public class ProfileScreen implements Screen {
             while (rs.next()) {
                 Item item = new Item(rs);
                 VBox itemPane = new VBox();
+                itemPane.setSpacing(4);
                 if (user.getId() == this.userId) {
                     RadioButton rb = new RadioButton("Selecteer item");
                     rb.setUserData(item);
                     rb.setToggleGroup(this.toggleGroup);
+                    rb.getStyleClass().add("radiobtn");
                     itemPane.getChildren().add(rb);
                 }
 

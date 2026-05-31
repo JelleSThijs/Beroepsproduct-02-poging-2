@@ -89,7 +89,7 @@
     -fx-padding: 8 12 8 -16;
 }
 
-.icon, .btn, .txtfield,
+.icon, .btn, .txtfield, .radiobtn,
 .alert .button-bar .button {
     -fx-background-color: -color-licht;
     -fx-border-color: -color-schaduw;
@@ -119,4 +119,15 @@
     -fx-padding: 4px 8px;
     -fx-border-radius: 100;
     -fx-background-radius: 100;
+}
+
+.radiobtn .radio {
+    -fx-background-color: -color-licht;
+    -fx-border-color: -color-schaduw;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+}
+
+.radiobtn .radio:hover{
+    -fx-background-color: -color-schaduw;
 }

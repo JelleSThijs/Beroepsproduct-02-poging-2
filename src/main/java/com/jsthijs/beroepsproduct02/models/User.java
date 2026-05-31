@@ -26,13 +26,15 @@ public class User {
     }
 
     public User(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.username = rs.getString("username");
-        this.password = rs.getString("password");
-        this.name = rs.getString("name");
-        this.email = rs.getString("email");
-        this.phoneNumber = rs.getString("phoneNumber");
-        this.city = rs.getString("city");
+        if  (rs.next()) {
+            id = rs.getInt("id");
+            username = rs.getString("username");
+            password = rs.getString("password");
+            name = rs.getString("name");
+            email = rs.getString("email");
+            phoneNumber = rs.getString("phoneNumber");
+            city = rs.getString("city");
+        }
     }
 
     public void deleteItem(Item item) {
