@@ -5,6 +5,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -139,7 +140,10 @@ public class RegisterScreen implements Screen{
                         NavigateTo(new ProfileScreen(user.getId()));
                     }
                 }
-            } catch (SQLException ex) { throw new RuntimeException(ex); }
+            } catch (SQLException ex) {
+                showErrorAlert("Registreren is mislukt. probeer een andere gebruikersnaam.");
+                throw new RuntimeException(ex);
+            }
         });
 
         registerPane.add(registerButton, 0, 7, 2, 1);
@@ -152,6 +156,15 @@ public class RegisterScreen implements Screen{
 
     public String getTitle() {
         return "Register Screen";
+    }
+
+    // Toont een foutmelding als er iets misgaat bij het registreren.
+    private void showErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Fout");
+        alert.setHeaderText("Er ging iets mis");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }

@@ -119,23 +119,37 @@ public class NewScreen implements Screen {
 
     // Maakt een nieuw item aan en slaat dit op.
     private void saveItem() {
-        // Geselecteerde tags ophalen.
-        ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
-        Item item = new Item(
-                title.getText(),
-                summary.getText(),
-                imagePath.getText(),
-                maker.getText(),
-                Integer.parseInt(releaseYear.getText()),
-                type.getValue(),
-                user.getId(),
-                itemTags
-        );
+        try {
+            // Geselecteerde tags ophalen.
+            ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
+            Item item = new Item(
+                    title.getText(),
+                    summary.getText(),
+                    imagePath.getText(),
+                    maker.getText(),
+                    Integer.parseInt(releaseYear.getText()),
+                    type.getValue(),
+                    user.getId(),
+                    itemTags
+            );
 
-        // Opslaan in de database.
-        db.addItem(item);
-        db.setItemTags(item.getId(), itemTags);
-        NavigateTo(new ProfileScreen(user.getId()));
+            // Opslaan in de database.
+            db.addItem(item);
+            db.setItemTags(item.getId(), itemTags);
+            NavigateTo(new ProfileScreen(user.getId()));
+        } catch (Exception ex) {
+            showErrorAlert("Opslaan is mislukt.");
+            throw new RuntimeException(ex);
+        }
+    }
+
+    // Toont een foutmelding als opslaan faalt.
+    private void showErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Fout");
+        alert.setHeaderText("Er ging iets mis");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public Scene getScene() {

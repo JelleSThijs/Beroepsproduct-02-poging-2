@@ -5,6 +5,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
@@ -95,7 +96,10 @@ public class LoginScreen implements Screen{
                     password.setStyle("-fx-text-fill: red;");
                     alert.setVisible(true);
                 }
-            } catch (SQLException ex) { throw new RuntimeException(ex); }
+            } catch (SQLException ex) {
+                showErrorAlert("Inloggen is mislukt. Controleer uw gegevens.");
+                throw new RuntimeException(ex);
+            }
         });
 
         loginPane.add(registerButton, 0, 3);
@@ -110,6 +114,15 @@ public class LoginScreen implements Screen{
 
     public String getTitle() {
         return "Login Screen";
+    }
+
+    // Toont een foutmelding als er iets misgaat bij het inloggen.
+    private void showErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Fout");
+        alert.setHeaderText("Er ging iets mis");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }
