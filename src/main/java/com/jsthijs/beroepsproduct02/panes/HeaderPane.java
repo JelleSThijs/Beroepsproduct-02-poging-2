@@ -77,6 +77,12 @@ public class HeaderPane {
             filter2.setPrefSize(156, 48);
             filter2.setPromptText("Release Date");
             filter2.getStyleClass().addAll("h3", "dropdown");
+            filter2.setTextFormatter(new TextFormatter<>(change -> {
+                if (change.getText().matches("[0-9]*") && change.getControlNewText().length() <= 4) {
+                    return change;
+                }
+                    return null;
+            }));
 
             // filter 3
             ChoiceBox filter3 = new ChoiceBox();
