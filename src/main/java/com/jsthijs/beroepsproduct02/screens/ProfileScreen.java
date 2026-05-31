@@ -43,14 +43,21 @@ public class ProfileScreen implements Screen {
                 crudPane.setAlignment(Pos.CENTER);
 
                 Button newButton = new Button("Nieuw");
+                newButton.setPrefWidth(150);
+                newButton.getStyleClass().add("btn");
                 newButton.setOnAction(e -> { NavigateTo(new NewScreen()); });
 
                 Button editButton = new Button("Edit");
+                editButton.setPrefWidth(150);
+                editButton.getStyleClass().add("btn");
                 editButton.setOnAction(e -> {
                     NavigateTo(new EditScreen((Item) this.toggleGroup.getSelectedToggle().getUserData()));
                 });
 
+
                 Button deleteItemButton = new Button("Verwijder");
+                deleteItemButton.setPrefWidth(150);
+                deleteItemButton.getStyleClass().add("btn");
                 deleteItemButton.setOnAction(e -> {
                     deleteItemAlert((Item) this.toggleGroup.getSelectedToggle().getUserData());
                 });
@@ -60,6 +67,8 @@ public class ProfileScreen implements Screen {
                 if (user.getIsAdmin() == 1 && this.userId != user.getId()) {
                     // Admins kunnen ook andere gebruikers verwijderen.
                     Button deleteUserButton = new Button("Verwijder Gebruiker");
+                    deleteUserButton.setPrefWidth(200);
+                    deleteUserButton.getStyleClass().add("btn");
                     deleteUserButton.setOnAction(e -> {
                         deleteUserAlert(this.userId);
                     });
