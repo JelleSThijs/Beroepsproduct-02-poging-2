@@ -97,7 +97,7 @@ public class RegisterScreen implements Screen{
         phoneNumber.setPromptText("Telefoonnummer");
         // Alleen cijfers toestaan in het telefoonnummerveld.
         phoneNumber.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.getText().matches("[0-9]*")) { return change; }
+            if (change.getText().matches("[0-9]*") && change.getControlNewText().length() <= 12) { return change; }
             return null;
         }));
 
