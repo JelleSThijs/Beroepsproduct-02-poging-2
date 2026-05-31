@@ -106,6 +106,7 @@ public class Item {
 
         renderTags().forEach(tag -> {
             if (tag.getId() != null && tag.getId().equals("typeText")) {
+                tag.setStyle("-fx-background-color: -color-licht; -fx-border-color: -color-schaduw");
                 itemStack.getChildren().add(tag);
             } else { itemPane.getChildren().add(tag); }
         });
