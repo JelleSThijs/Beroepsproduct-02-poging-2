@@ -120,6 +120,15 @@ public class NewScreen implements Screen {
     // Maakt een nieuw item aan en slaat dit op.
     private void saveItem() {
         try {
+            if (
+                title.getText().isEmpty() ||
+                summary.getText().isEmpty() ||
+                imagePath.getText().isEmpty() ||
+                maker.getText().isEmpty() ||
+                releaseYear.getText().isEmpty() ||
+                type.getValue().isEmpty()
+            ) { throw new Exception("Vul de vereisten velden in!"); }
+
             // Geselecteerde tags ophalen.
             ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
             Item item = new Item(

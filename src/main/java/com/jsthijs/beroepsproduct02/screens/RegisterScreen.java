@@ -119,17 +119,22 @@ public class RegisterScreen implements Screen{
         registerButton.getStyleClass().add("btn");
         GridPane.setHalignment(registerButton, HPos.CENTER);
         registerButton.setOnMouseClicked(e -> {
-            // Maak een tijdelijke gebruiker op basis van het formulier.
-            User tempUser = new User(
-                    username.getText(),
-                    password.getText(),
-                    name.getText(),
-                    email.getText(),
-                    phoneNumber.getText(),
-                    city.getText()
-            );
-
             try {
+                if (
+                    username.getText().isEmpty() ||
+                    password.getText().isEmpty() ||
+                    name.getText().isEmpty()
+                ) { throw new Exception("Vul de vereisten velden in!"); }
+
+                // Maak een tijdelijke gebruiker op basis van het formulier.
+                User tempUser = new User(
+                        username.getText(),
+                        password.getText(),
+                        name.getText(),
+                        email.getText(),
+                        phoneNumber.getText(),
+                        city.getText()
+                );
                 // Sla de gebruiker op, log in en navigeer naar het profiel.
                 if (db.addUser(tempUser)) {
                     // Inloggen met de nieuwe gebruiker.
@@ -140,7 +145,7 @@ public class RegisterScreen implements Screen{
                         NavigateTo(new ProfileScreen(user.getId()));
                     }
                 }
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 showErrorAlert("Registreren is mislukt. probeer een andere gebruikersnaam.");
                 throw new RuntimeException(ex);
             }

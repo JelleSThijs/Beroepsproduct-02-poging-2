@@ -49,26 +49,49 @@ public class EditScreen extends NewScreen implements Screen {
 
     // Slaat wijzigingen op en keert terug naar het profiel.
     private void updateItem(Item item) {
-        // Geselecteerde tags verzamelen.
-        ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
-        // Nieuwe data in de itemklas zetten.
-        item.setData(
-                title.getText(),
-                summary.getText(),
-                imagePath.getText(),
-                maker.getText(),
-                Integer.parseInt(releaseYear.getText()),
-                type.getValue(),
-                user.getId(),
-                itemTags
-        );
+        try {
+            if (
+                title.getText().isEmpty() ||
+                summary.getText().isEmpty() ||
+                imagePath.getText().isEmpty() ||
+                maker.getText().isEmpty() ||
+                releaseYear.getText().isEmpty() ||
+                type.getValue().isEmpty()
+            ) { throw new Exception("Vul de vereisten velden in!"); }
 
-        // Update de item in de database.
-        db.updateItem(item);
-        // Tags van de item updaten in de database
-        db.setItemTags(item.getId(), itemTags);
-        // Terug naar profiel sturen.
-        NavigateTo(new ProfileScreen(user.getId()));
+            // Geselecteerde tags verzamelen.
+            ArrayList<String> itemTags = new ArrayList<>(genre.getSelectionModel().getSelectedItems());
+            // Nieuwe data in de itemklas zetten.
+            item.setData(
+                    title.getText(),
+                    summary.getText(),
+                    imagePath.getText(),
+                    maker.getText(),
+                    Integer.parseInt(releaseYear.getText()),
+                    type.getValue(),
+                    user.getId(),
+                    itemTags
+            );
+
+            // Update de item in de database.
+            db.updateItem(item);
+            // Tags van de item updaten in de database
+            db.setItemTags(item.getId(), itemTags);
+            // Terug naar profiel sturen.
+            NavigateTo(new ProfileScreen(user.getId()));
+        } catch (Exception ex) {
+            showErrorAlert("Opslaan is mislukt.");
+            throw new RuntimeException(ex);
+        }
+    }
+
+    // Toont een foutmelding als opslaan faalt.
+    private void showErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Fout");
+        alert.setHeaderText("Er ging iets mis");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }
