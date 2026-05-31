@@ -42,7 +42,9 @@ public class LoginScreen implements Screen{
 
 // Row 0 - Username
         Text usernameLabel = new Text("Gebruikersnaam");
+        usernameLabel.getStyleClass().add("h3");
         TextField username = new TextField();
+        username.getStyleClass().addAll("h3", "txtfield");
         username.setPromptText("Gebruikersnaam");
 
         loginPane.add(usernameLabel, 0, 0);
@@ -50,7 +52,9 @@ public class LoginScreen implements Screen{
 
 // Row 1 - Password
         Text passwordLabel = new Text("Wachtwoord");
+        passwordLabel.getStyleClass().add("h3");
         TextField password = new TextField();
+        password.getStyleClass().addAll("h3", "txtfield");
         password.setPromptText("Wachtwoord");
 
         loginPane.add(passwordLabel, 0, 1);
@@ -58,10 +62,14 @@ public class LoginScreen implements Screen{
 
 // Row 2 - Buttons
         Button registerButton = new Button("Registreren");
+        registerButton.getStyleClass().addAll("btn");
+        registerButton.setPrefWidth(150);
         GridPane.setHalignment(registerButton, HPos.CENTER);
         registerButton.setOnMouseClicked(e -> { NavigateTo(new RegisterScreen()); });
 
         Button loginButton = new Button("Login");
+        loginButton.getStyleClass().add("btn");
+        loginButton.setPrefWidth(150);
         GridPane.setHalignment(loginButton, HPos.CENTER);
         loginButton.setOnMouseClicked(e -> {
             try {

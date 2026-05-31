@@ -89,17 +89,32 @@
     -fx-padding: 8 12 8 -16;
 }
 
-.icon {
+.icon, .btn, .txtfield {
     -fx-background-color: -color-licht;
     -fx-border-color: -color-schaduw;
-    -fx-padding: 4px;
-    -fx-border-radius: 100%;
-    -fx-background-radius: 100%;
+    -fx-padding: 8px;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+}
+
+.txtfield {
+    -fx-padding: 4px 8px;
+}
+
+.icon:hover, .btn:hover {
+    -fx-background-color: -color-schaduw;
+    -fx-text-fill: -color-licht;
+}
+
+.icon:pressed, .btn:pressed {
+    -fx-background-color: -color-donker;
+    -fx-border-color: -color-donker;
+    -fx-text-fill: -color-licht;
 }
 
 .tags {
     -fx-text-fill: -color-licht;
     -fx-padding: 2px 4px;
-    -fx-border-radius: 100%;
-    -fx-background-radius: 100%;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
 }
