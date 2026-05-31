@@ -35,41 +35,33 @@ public class ItemScreen implements Screen {
         itemBox.setPrefSize(1160, 550);
         itemBox.setSpacing(48);
 
-        itemBox.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
-
-
         ImageView itemImg = new ImageView(item.getImage());
         itemImg.setFitWidth(400);
         itemImg.setFitHeight(550);
 
         VBox itemText = new VBox();
         itemText.setSpacing(24);
-        itemText.setStyle("-fx-border-color: green; -fx-border-width: 1px;");
+        itemText.setAlignment(Pos.CENTER_LEFT);
 
         FlowPane itemTitle = new FlowPane(new Text(item.getName()));
         itemTitle.setPrefHeight(48);
         itemTitle.setAlignment(Pos.CENTER_LEFT);
-        itemTitle.setStyle("-fx-border-color: orange; -fx-border-width: 1px;");
 
         HBox itemTags = renderTags();
-        itemTags.setStyle("-fx-border-color: blue; -fx-border-width: 1px;");
         itemTags.setAlignment(Pos.CENTER_LEFT);
         itemTags.setPrefHeight(32);
 
         FlowPane itemDescription = new FlowPane(new Text(item.getSummary()));
         itemDescription.setPrefHeight(240);
-        itemDescription.setStyle("-fx-border-color: purple; -fx-border-width: 1px;");
 
         FlowPane itemOwnerPane = new FlowPane();
         itemOwnerPane.setPrefHeight(48);
         itemOwnerPane.setAlignment(Pos.CENTER_LEFT);
-        itemOwnerPane.setStyle("-fx-border-color: pink; -fx-border-width: 1px;");
 
         HBox contactBox = new HBox();
         contactBox.setPrefSize(712, 48);
         contactBox.setAlignment(Pos.CENTER);
         contactBox.setSpacing(14);
-        contactBox.setStyle("-fx-border-color: brown; -fx-border-width: 1px;");
 
         ImageView contactIcon = new ImageView(Application.class.getResource("icons/letter-48.png").toString());
 
