@@ -40,25 +40,30 @@ public class LoginScreen implements Screen{
         loginPane.setVgap(15);
         loginPane.setAlignment(Pos.TOP_CENTER);
 
-// Row 0 - Username
+// Row 0 - Title
+        Text title = new Text("Inloggen");
+        title.getStyleClass().add("h1");
+        loginPane.add(title, 0, 0);
+
+// Row 1 - Username
         Text usernameLabel = new Text("Gebruikersnaam");
         usernameLabel.getStyleClass().add("h3");
         TextField username = new TextField();
         username.getStyleClass().addAll("h3", "txtfield");
         username.setPromptText("Gebruikersnaam");
 
-        loginPane.add(usernameLabel, 0, 0);
-        loginPane.add(username, 1, 0);
+        loginPane.add(usernameLabel, 0, 1);
+        loginPane.add(username, 1, 1);
 
-// Row 1 - Password
+// Row 2 - Password
         Text passwordLabel = new Text("Wachtwoord");
         passwordLabel.getStyleClass().add("h3");
         TextField password = new TextField();
         password.getStyleClass().addAll("h3", "txtfield");
         password.setPromptText("Wachtwoord");
 
-        loginPane.add(passwordLabel, 0, 1);
-        loginPane.add(password, 1, 1);
+        loginPane.add(passwordLabel, 0, 2);
+        loginPane.add(password, 1, 2);
 
 // Row 2 - Buttons
         Button registerButton = new Button("Registreren");
@@ -86,8 +91,8 @@ public class LoginScreen implements Screen{
             } catch (SQLException ex) { throw new RuntimeException(ex); }
         });
 
-        loginPane.add(registerButton, 0, 2);
-        loginPane.add(loginButton, 1, 2);
+        loginPane.add(registerButton, 0, 3);
+        loginPane.add(loginButton, 1, 3);
 
         root.getChildren().addAll(header, loginPane, alert);
     }
