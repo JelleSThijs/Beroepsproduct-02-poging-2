@@ -91,9 +91,8 @@ public class Item {
             itemStack.getChildren().add(itemImg);
         } catch (Exception e) {
             Region itemImg = new Region();
-            itemImg.setPrefHeight(196);
-            itemImg.setPrefWidth(144);
-            itemImg.setStyle("-fx-background-color: lightgray;");
+            itemImg.setPrefSize(144, 196);
+            itemImg.setStyle("-fx-background-color: lightgray; -fx-border-radius: 20; -fx-background-radius: 20");
             itemImg.getStyleClass().add("img");
             itemStack.getChildren().add(itemImg);
         }
