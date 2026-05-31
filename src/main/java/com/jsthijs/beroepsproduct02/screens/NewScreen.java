@@ -65,6 +65,12 @@ public class NewScreen implements Screen {
         releaseYear.setPromptText("Jaar");
         releaseYear.setPrefSize(100, 32);
         releaseYear.getStyleClass().addAll("h3", "txtfield");
+        releaseYear.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getText().matches("[0-9]*") && change.getControlNewText().length() <= 4) {
+                return change;
+            }
+                return null;
+        }));
 
         type.getItems().addAll("boek", "film");
         type.setPrefSize(100, 32);
