@@ -153,4 +153,14 @@ public class ProfileScreen implements Screen {
             alert.close();
         }
     }
+
+    @Override
+    public Scene getScene() {
+        return this.scene;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Profiel pagina";
+    }
 }

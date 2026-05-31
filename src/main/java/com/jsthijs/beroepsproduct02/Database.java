@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import static com.jsthijs.beroepsproduct02.Application.dbTags;
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 // Database-toegang en query helper voor het project.
 public class Database {
@@ -52,8 +53,12 @@ public class Database {
     // Voegt een nieuw item toe en zet het ID op het model.
     public void addItem(Item item) {
         try {
-            // Prepare statement om fouten en sql injection tegen te gaan
-            PreparedStatement ps = this.conn.prepareStatement("INSERT INTO items VALUES (0, ?, ?, ?, ?, ?, ?, ?)");
+            // Prepare statement om fouten en sql injection tegen te gaan.
+            // Geeft ook gelijk het gemaakte item id terug
+            PreparedStatement ps = this.conn.prepareStatement(
+                "INSERT INTO items VALUES (0, ?, ?, ?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
+            );
             // Velden invullen.
             ps.setString(1, item.getName());
             ps.setString(2, item.getSummary());
@@ -64,6 +69,12 @@ public class Database {
             ps.setInt(7, item.getUserId());
             // Uitvoeren.
             ps.executeUpdate();
+
+            // Gegenereerde ID ophalen en op het model zetten.
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                item.setId(rs.getInt(1));
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -155,11 +166,11 @@ public class Database {
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
 
-    public ResultSet getItemsByUser(String username) {
+    public ResultSet getUserItems(int userId) {
         try {
             // Items van een gebruiker ophalen.
             PreparedStatement ps = this.conn.prepareStatement("SELECT * FROM items WHERE userId = ?");
-            ps.setString(1, username);
+            ps.setInt(1, userId);
             // Resultaat teruggeven.
             return ps.executeQuery();
         } catch (SQLException e) { throw new RuntimeException(e); }
