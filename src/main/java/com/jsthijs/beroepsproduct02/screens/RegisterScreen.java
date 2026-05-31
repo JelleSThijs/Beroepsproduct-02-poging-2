@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -91,6 +92,10 @@ public class RegisterScreen implements Screen{
         TextField phoneNumber = new TextField();
         phoneNumber.getStyleClass().addAll("h3", "txtfield");
         phoneNumber.setPromptText("Telefoonnummer");
+        phoneNumber.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getText().matches("[0-9]*")) { return change; }
+            return null;
+        }));
 
         registerPane.add(phoneLabel, 0, 5);
         registerPane.add(phoneNumber, 1, 5);
