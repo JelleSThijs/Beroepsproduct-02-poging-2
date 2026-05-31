@@ -34,62 +34,80 @@ public class RegisterScreen implements Screen{
         alert.setVisible(false);
 
         GridPane registerPane = new GridPane();
-        registerPane.setPrefSize(350, 225);
+        registerPane.setPrefSize(450, 225);
         registerPane.setPadding(new Insets(150, 0, 0, 0));
         registerPane.setHgap(15);
         registerPane.setVgap(15);
         registerPane.setAlignment(Pos.TOP_CENTER);
 
-// Row 0 - Username
+// Row 0 - Title
+        Text title = new Text("Registreren");
+        title.getStyleClass().add("h1");
+        registerPane.add(title, 0, 0);
+
+// Row 1 - Username
         Text usernameLabel = new Text("Gebruikersnaam");
+        usernameLabel.getStyleClass().add("h3");
         TextField username = new TextField();
+        username.getStyleClass().addAll("h3", "txtfield");
         username.setPromptText("Gebruikersnaam");
 
-        registerPane.add(usernameLabel, 0, 0);
-        registerPane.add(username, 1, 0);
+        registerPane.add(usernameLabel, 0, 1);
+        registerPane.add(username, 1, 1);
 
-// Row 1 - Password
+// Row 2 - Password
         Text passwordLabel = new Text("Wachtwoord");
+        passwordLabel.getStyleClass().add("h3");
         TextField password = new TextField();
+        password.getStyleClass().addAll("h3", "txtfield");
         password.setPromptText("Wachtwoord");
 
-        registerPane.add(passwordLabel, 0, 1);
-        registerPane.add(password, 1, 1);
+        registerPane.add(passwordLabel, 0, 2);
+        registerPane.add(password, 1, 2);
 
-// Row 2 - naam van gebruiker
+// Row 3 - naam van gebruiker
         Text nameLabel = new Text("Naam");
+        nameLabel.getStyleClass().add("h3");
         TextField name = new TextField();
+        name.getStyleClass().addAll("h3", "txtfield");
         name.setPromptText("Naam");
 
-        registerPane.add(nameLabel, 0, 2);
-        registerPane.add(name, 1, 2);
+        registerPane.add(nameLabel, 0, 3);
+        registerPane.add(name, 1, 3);
 
-// Row 3 - email
+// Row 4 - email
         Text emailLabel = new Text("Email (optioneel)");
+        emailLabel.getStyleClass().add("h3");
         TextField email = new TextField();
+        email.getStyleClass().addAll("h3", "txtfield");
         email.setPromptText("Email");
 
-        registerPane.add(emailLabel, 0, 3);
-        registerPane.add(email, 1, 3);
+        registerPane.add(emailLabel, 0, 4);
+        registerPane.add(email, 1, 4);
 
-// Row 4 - telefoonnummer
+// Row 5 - telefoonnummer
         Text phoneLabel = new Text("Telefoonnummer (optioneel)");
+        phoneLabel.getStyleClass().add("h3");
         TextField phoneNumber = new TextField();
+        phoneNumber.getStyleClass().addAll("h3", "txtfield");
         phoneNumber.setPromptText("Telefoonnummer");
 
-        registerPane.add(phoneLabel, 0, 4);
-        registerPane.add(phoneNumber, 1, 4);
+        registerPane.add(phoneLabel, 0, 5);
+        registerPane.add(phoneNumber, 1, 5);
 
-// Row 5 - woonplaats
+// Row 6 - woonplaats
         Text cityLabel = new Text("Woonplaats (optioneel)");
+        cityLabel.getStyleClass().add("h3");
         TextField city = new TextField();
+        city.getStyleClass().addAll("h3", "txtfield");
         city.setPromptText("Woonplaats");
 
-        registerPane.add(cityLabel, 0, 5);
-        registerPane.add(city, 1, 5);
+        registerPane.add(cityLabel, 0, 6);
+        registerPane.add(city, 1, 6);
 
-// Row 6 - Buttons
+// Row 7 - Buttons
         Button registerButton = new Button("Registreren");
+        registerButton.getStyleClass().add("btn");
         GridPane.setHalignment(registerButton, HPos.CENTER);
         registerButton.setOnMouseClicked(e -> {
             User tempUser = new User(
@@ -109,7 +127,7 @@ public class RegisterScreen implements Screen{
             }
         });
 
-        registerPane.add(registerButton, 0, 6, 2, 1);
+        registerPane.add(registerButton, 0, 7, 2, 1);
         root.getChildren().addAll(header, registerPane, alert);
     }
 

@@ -98,7 +98,7 @@
 }
 
 .txtfield {
-    -fx-padding: 4px 8px;
+    -fx-padding: 4px 16px;
 }
 
 .icon:hover, .btn:hover {
