@@ -112,9 +112,8 @@
     -fx-text-fill: -color-licht;
 }
 
-.tags {
-    -fx-text-fill: -color-licht;
-    -fx-padding: 2px 4px;
+.tag {
+    -fx-padding: 4px 8px;
     -fx-border-radius: 100;
     -fx-background-radius: 100;
 }

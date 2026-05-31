@@ -4,11 +4,9 @@ import static com.jsthijs.beroepsproduct02.Application.*;
 
 import com.jsthijs.beroepsproduct02.Application;
 import com.jsthijs.beroepsproduct02.models.Item;
-import com.mysql.cj.protocol.Resultset;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.Flow;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -48,9 +46,13 @@ public class ItemScreen implements Screen {
         itemTitle.setPrefHeight(48);
         itemTitle.setAlignment(Pos.CENTER_LEFT);
 
-        HBox itemTags = renderTags();
+        HBox itemTags = new HBox();
         itemTags.setAlignment(Pos.CENTER_LEFT);
         itemTags.setPrefHeight(32);
+        itemTags.setSpacing(10);
+        item.renderTags().forEach(tag -> {
+            itemTags.getChildren().add(tag);
+        });
 
         FlowPane itemDescription = new FlowPane(new Text(item.getSummary()));
         itemDescription.setPrefHeight(240);
@@ -93,26 +95,6 @@ public class ItemScreen implements Screen {
         itemBox.getChildren().addAll(itemImg, itemText);
         root.getChildren().addAll(header, itemBox);
     }
-
-    private HBox renderTags() {
-        HBox tagList = new HBox();
-        tagList.setAlignment(Pos.CENTER);
-        tagList.setSpacing(10);
-
-        Text typeText = new Text(item.getType());
-        Text makerText = new Text(item.getMaker());
-        Text releaseYearText = new Text(item.getReleaseYear().toString());
-        tagList.getChildren().addAll(typeText, makerText, releaseYearText);
-
-        item.getTags().forEach(tag -> {
-            Text tagText = new Text(tag);
-            tagText.setStyle("-fx-background-color: lightgray; -fx-padding: 5px;");
-            tagList.getChildren().add(tagText);
-        });
-
-        return tagList;
-    }
-
 
     public Scene getScene() {
         return this.scene;

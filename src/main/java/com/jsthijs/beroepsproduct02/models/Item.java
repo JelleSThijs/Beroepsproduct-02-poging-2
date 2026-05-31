@@ -4,6 +4,7 @@ import static com.jsthijs.beroepsproduct02.Application.*;
 
 import com.jsthijs.beroepsproduct02.screens.ItemScreen;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -86,24 +87,9 @@ public class Item {
         itemTitle.setPrefWidth(144);
         itemPane.getChildren().add(itemTitle);
 
-
-        for (int i = 0; i < this.getTags().size() && i < 3; i ++) {
-            FlowPane tagText = new FlowPane(new Text(this.getTags().get(i)));
-            tagText.setStyle("-fx-background-color: red");
-            tagText.setPrefSize(64, 16);
-            itemPane.getChildren().add(tagText);
-        }
-
-
-        FlowPane releaseYear = new FlowPane(new Text(this.getReleaseYear().toString()));
-        releaseYear.setPrefSize(60, 16);
-        releaseYear.setStyle("-fx-background-color: blue");
-
-        FlowPane maker = new FlowPane(new Text(this.getMaker()));
-        maker.setStyle("-fx-background-color: purple");
-        maker.setPrefSize(144, 16);
-
-        itemPane.getChildren().addAll(releaseYear, maker);
+        renderTags().forEach(tag -> {
+            itemPane.getChildren().add(tag);
+        });
 
         itemPane.setOnMouseClicked(e -> {
             // navigeer naar de detailscherm van dit item
@@ -111,6 +97,34 @@ public class Item {
         });
 
         return itemPane;
+    }
+
+    public ArrayList<Label> renderTags() {
+        ArrayList<Label> tags = new ArrayList<>();
+
+        Label typeText = new Label(this.getType());
+        typeText.getStyleClass().add("tag");
+        typeText.setStyle("-fx-background-color: lightblue; -fx-border-color: blue");
+        tags.add(typeText);
+
+        Label makerText = new Label(this.getMaker());
+        makerText.getStyleClass().add("tag");
+        makerText.setStyle("-fx-background-color: lightpink; -fx-border-color: purple");
+        tags.add(makerText);
+
+        Label releaseYearText = new Label(this.getReleaseYear().toString());
+        releaseYearText.getStyleClass().add("tag");
+        releaseYearText.setStyle("-fx-background-color: lightyellow; -fx-border-color: yellow");
+        tags.add(releaseYearText);
+
+        this.getTags().forEach(tag -> {
+            Label tagText = new Label(tag);
+            tagText.getStyleClass().add("tag");
+            tagText.setStyle("-fx-background-color: lightcoral;  -fx-border-color: red");
+            tags.add(tagText);
+        });
+
+        return tags;
     }
 
     public void setData(String name, String summary, String image, String maker, Integer releaseYear, String type, int userId, ArrayList<String> tags) {
