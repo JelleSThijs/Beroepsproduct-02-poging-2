@@ -30,6 +30,7 @@ public class ItemScreen implements Screen {
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
         root.setVgap(70);
+        ApplyStylesheet(this.scene);
 
         HBox itemBox = new HBox();
         itemBox.setPrefSize(1160, 550);

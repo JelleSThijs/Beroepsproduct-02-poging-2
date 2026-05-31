@@ -19,6 +19,7 @@ public class HomeScreen implements Screen {
     public HomeScreen() {
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
+        ApplyStylesheet(this.scene);
 
         VBox items = new VBox();
         items.setPadding(new Insets(0, 120, 0, 120));

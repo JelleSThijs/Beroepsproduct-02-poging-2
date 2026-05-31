@@ -33,7 +33,7 @@ public class HeaderPane {
         // home knop
         FlowPane homeButton = new FlowPane();
         homeButton.setPrefSize(72, 72);
-        homeButton.setStyle("-fx-background-color: white;");
+        homeButton.getStyleClass().add("icon");
         homeButton.setAlignment(Pos.CENTER);
         homeButton.setOnMouseClicked(e -> { NavigateTo(new HomeScreen()); });
 
@@ -48,17 +48,20 @@ public class HeaderPane {
         searchBox.setAlignment(Pos.CENTER);
         searchBox.setPrefSize(1160, 40);
         searchBox.setMaxSize(1160, 40);
-        searchBox.setSpacing(8);
-        searchBox.setStyle("-fx-background-color: #a8a8a8;");
+        searchBox.setStyle("-fx-border-radius: 8px; -fx-background-radius: 8px;");
+
 
             // text veld
             TextField searchText = new TextField();
             searchText.setPromptText("Zoeken");
-            searchText.setPrefSize(600, 40);
+            searchText.setPrefSize(600, 48);
+            searchText.getStyleClass().addAll("h3", "dropdown");
+            searchText.setStyle("-fx-border-radius: 100 0 0 100; -fx-background-radius: 100 0 0 100; -fx-padding: 0 0 0 16");
 
             // filter 1
             ChoiceBox filter1 = new ChoiceBox();
-            filter1.setPrefSize(156, 40);
+            filter1.setPrefSize(156, 48);
+            filter1.getStyleClass().addAll("h3", "dropdown");
             filter1.setValue("Genre");
             filter1.getItems().add("Genre");
             try {
@@ -69,25 +72,28 @@ public class HeaderPane {
                 throw new RuntimeException(e);
             }
 
-
             // filter 2
             TextField filter2 = new TextField();
-            filter2.setPrefSize(156, 40);
+            filter2.setPrefSize(156, 48);
             filter2.setPromptText("Release Date");
+            filter2.getStyleClass().addAll("h3", "dropdown");
 
             // filter 3
             ChoiceBox filter3 = new ChoiceBox();
-            filter3.setPrefSize(156, 40);
+            filter3.setPrefSize(156, 48);
+            filter3.getStyleClass().addAll("h3", "dropdown");
             filter3.setValue("Type");
             filter3.getItems().addAll("Type", "boek", "film");
 
             // zoekknop
             ImageView searchIcon = new ImageView(Application.class.getResource("icons/search-48.png").toString());
             searchIcon.setPreserveRatio(true);
-            searchIcon.setFitHeight(48);
+            searchIcon.setFitHeight(32);
 
             FlowPane searchIconPane = new FlowPane(searchIcon);
             searchIconPane.setAlignment(Pos.CENTER);
+            searchIconPane.getStyleClass().add("icon");
+            searchIconPane.setStyle("-fx-border-radius: 0 100 100 0; -fx-background-radius: 0 100 100 0; -fx-padding: 0;");
             searchIconPane.setPrefSize(48,48);
             searchIconPane.setOnMouseClicked(event -> {
                 NavigateTo(new SearchScreen(
@@ -103,7 +109,7 @@ public class HeaderPane {
         // gebruikers account knop
         FlowPane userButton = new FlowPane();
         userButton.setPrefSize(72, 72);
-        userButton.setStyle("-fx-background-color: white;");
+        userButton.getStyleClass().add("icon");
         userButton.setAlignment(Pos.CENTER);
         userButton.setOnMouseClicked(e -> {
             if(user != null) { NavigateTo(new ProfileScreen(user.getId())); }

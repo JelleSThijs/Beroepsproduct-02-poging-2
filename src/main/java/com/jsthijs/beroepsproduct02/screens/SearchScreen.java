@@ -24,6 +24,7 @@ public class SearchScreen implements Screen {
     public SearchScreen(String searchText, String tag, String releaseYear, String type) {
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
+        ApplyStylesheet(this.scene);
 
         VBox vbox = new VBox(itemList(searchText, tag, releaseYear, type));
         vbox.setPrefWidth(window_size[0]);

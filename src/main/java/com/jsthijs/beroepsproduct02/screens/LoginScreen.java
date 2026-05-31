@@ -26,6 +26,7 @@ public class LoginScreen implements Screen{
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
         root.setVgap(10);
+        ApplyStylesheet(this.scene);
 
         FlowPane alert = new FlowPane(new Text("gegevens incorrect"));
         alert.setMinWidth(window_size[0]);

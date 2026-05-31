@@ -66,6 +66,7 @@ public class Item {
         itemPane.setMaxWidth(144);
         itemPane.setHgap(14);
         itemPane.setVgap(4);
+        itemPane.setId("item-small");
 
         // probeerd een foto op te halen anders wordt er een grijs vlak gerendered
         try {

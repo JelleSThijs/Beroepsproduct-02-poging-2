@@ -31,6 +31,7 @@ public class NewScreen implements Screen {
         FlowPane root = new FlowPane();
         this.scene = new Scene(root, window_size[0], window_size[1]);
         root.setAlignment(Pos.TOP_CENTER);
+        ApplyStylesheet(this.scene);
 
         HBox itemPane =  new HBox();
         itemPane.setAlignment(Pos.CENTER);
