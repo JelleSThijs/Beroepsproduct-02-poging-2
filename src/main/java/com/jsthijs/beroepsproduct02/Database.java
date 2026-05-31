@@ -97,11 +97,10 @@ public class Database {
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
 
-    public void deleteItem(int itemId, int userId) {
+    public void deleteItem(int itemId) {
         try {
-            PreparedStatement ps = this.conn.prepareStatement("DELETE FROM items WHERE id = ? AND userId = ?");
+            PreparedStatement ps = this.conn.prepareStatement("DELETE FROM items WHERE id = ?");
             ps.setInt(1, itemId);
-            ps.setInt(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) { throw new RuntimeException(e); }
     }
@@ -227,22 +226,21 @@ public class Database {
 
     }
 
+    public void deleteUser(int userId) {
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("DELETE FROM users WHERE id = ?");
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+        } catch (SQLException e) { throw new RuntimeException(e); }
+    }
+
     public ResultSet getTags() {
         // haalt alle tags op uit de database
         try {
-            ResultSet rs  = this.stmt.executeQuery("SELECT id, name FROM tags");
+            ResultSet rs = this.stmt.executeQuery("SELECT id, name FROM tags");
             return rs;
         } catch (SQLException e) { throw new RuntimeException(e); }
 
-    }
-
-    public ResultSet executeQuery(String query) throws SQLException {
-        ResultSet rs = stmt.executeQuery(query);
-        return rs;
-    }
-
-    public void executeUpdate(String query) throws SQLException {
-        stmt.executeUpdate(query);
     }
 }
 

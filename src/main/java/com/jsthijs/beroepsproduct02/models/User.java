@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static com.jsthijs.beroepsproduct02.Application.db;
+import static com.jsthijs.beroepsproduct02.Application.user;
 
 public class User {
     private int id;
@@ -37,11 +38,16 @@ public class User {
     }
 
     public void deleteItem(Item item) {
-        if (this.id == item.getUserId()) {
-            db.deleteItem(item.getId(), this.id);
+        if (this.id == item.getUserId() || this.isAdmin == 1) {
+            db.deleteItem(item.getId());
         }
     }
 
+    public void deleteUser(int userId) {
+        if (this.isAdmin == 1) {
+            db.deleteUser(userId);
+        }
+    }
 
     public int getId() {
         return this.id;

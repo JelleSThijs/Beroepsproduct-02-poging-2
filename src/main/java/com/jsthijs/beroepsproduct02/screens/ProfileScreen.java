@@ -45,12 +45,23 @@ public class ProfileScreen implements Screen {
                     NavigateTo(new EditScreen((Item) this.toggleGroup.getSelectedToggle().getUserData()));
                 });
 
-                Button deleteButton = new Button("Verwijder");
-                deleteButton.setOnAction(e -> {
+                Button deleteItemButton = new Button("Verwijder");
+                deleteItemButton.setOnAction(e -> {
                     deleteItemAlert((Item) this.toggleGroup.getSelectedToggle().getUserData());
                 });
 
-                crudPane.getChildren().addAll(deleteButton, editButton, newButton);
+                crudPane.getChildren().addAll(newButton, editButton, deleteItemButton);
+
+                if (user.getIsAdmin() == 1 && this.userId != user.getId()) {
+                    Button deleteUserButton = new Button("Verwijder Gebruiker");
+                    deleteUserButton.setOnAction(e -> {
+                        deleteUserAlert(this.userId);
+                    });
+
+                    crudPane.getChildren().add(deleteUserButton);
+                }
+
+
                 root.getChildren().add(crudPane);
             }
         }
@@ -116,6 +127,20 @@ public class ProfileScreen implements Screen {
         if (alert.getResult() == ButtonType.OK) {
             user.deleteItem(item);
             NavigateTo(new ProfileScreen(this.userId));
+        } else {
+            alert.close();
+        }
+    }
+
+    private void deleteUserAlert(int userId) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Bevestig verwijdering gebruiker");
+        alert.setHeaderText(null);
+        alert.setContentText("Weet je zeker dat je deze gebruiker wilt verwijderen?");
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            user.deleteUser(this.userId);
+            NavigateTo(new HomeScreen());
         } else {
             alert.close();
         }

@@ -66,9 +66,8 @@ public class HeaderPane {
             filter1.setValue("Genre");
             filter1.getItems().add("Genre");
             try {
-                ResultSet rs = db.executeQuery("SELECT name FROM tags;");
+                ResultSet rs = db.getTags();
                 while(rs.next()) { filter1.getItems().add(rs.getString("name")); }
-
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
